@@ -7,11 +7,16 @@ import Lib
 import System.Console.CmdArgs
 
 data BPE = BPE {dict_file :: FilePath
-                  ,vocab_size :: Int
-                  }
-                  deriving (Show, Data, Typeable)
+                ,vocab_size :: Int
+                }
+                deriving (Show, Data, Typeable)
 
 sample = BPE{dict_file = def
-            ,vocab_size = 0}
+            ,vocab_size = 0
+            }
 
-main = print =<< cmdArgs sample
+main = do
+  args <- cmdArgs sample
+  print args
+  file <- readFile (dict_file args)
+  putStr file
