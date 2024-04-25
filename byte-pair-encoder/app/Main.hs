@@ -3,20 +3,22 @@
 
 module Main (main) where
 
-import Lib
 import System.Console.CmdArgs
+import Lib
 
 data BPE = BPE {dict_file :: FilePath
-                ,vocab_size :: Int
+                ,make_tokens :: Int
                 }
                 deriving (Show, Data, Typeable)
 
 sample = BPE{dict_file = def
-            ,vocab_size = 0
+            ,make_tokens = 0
             }
 
 main = do
   args <- cmdArgs sample
   print args
-  file <- readFile (dict_file args)
-  putStr file
+  
+  inputList <- readFile (dict_file args)
+  let (encodedText, decodeTable) = makeNTokens (textToSimpleTokens inputList) (make_tokens args)
+  print encodedText
