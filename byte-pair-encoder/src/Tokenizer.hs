@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
-module Lib
+module Tokenizer
     (textToSimpleTokens
     ,mostFrequentTokenPair
     ,addMergedToken
@@ -36,13 +36,16 @@ tokensToText (encodedTxt, decodeTable) = unwords $ map (\t ->  fromJust $ lookup
  
 
 mostFrequentTokenPair :: [TokenID] -> (TokenID, TokenID)
-mostFrequentTokenPair tokens = snd $ maximumBy (compare `on` fst) frequencies
+mostFrequentTokenPair tokens = fst mostFrequent
     where
           makePairs (a:b:t) = (a, b) : makePairs (b:t)
           makePairs _ = []
           pairs = makePairs tokens
-          frequencies = map (\l -> (length l, head l)) $ group $ sort pairs
           
+          frequenciesMap = foldr (\pair counterMap -> Map.insertWith (+) pair 1 counterMap ) Map.empty pairs -- still slow, but better
+          maxBySnd p1@(k1, v1) p2@(k2, v2) = if v1 > v2 then p1 else p2
+          mostFrequent = Map.foldrWithKey (\k1 n1 (k2, n2) -> maxBySnd (k1, n1) (k2, n2)) ((0, 0), 0) frequenciesMap
+
 
 addMergedToken :: (TokenID, TokenID) -> [(TokenID, String)] -> [(TokenID, String)]
 addMergedToken pair@(t1, t2) decodeTable = (newTokenID, tokenValue1 ++ tokenValue2) : decodeTable 

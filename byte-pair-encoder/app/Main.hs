@@ -4,7 +4,7 @@
 module Main (main) where
 
 import System.Console.CmdArgs
-import Lib
+import Tokenizer
 
 data BPE = BPE {dict_file :: FilePath
                 ,make_tokens :: Int
@@ -21,4 +21,4 @@ main = do
   
   inputList <- readFile (dict_file args)
   let (encodedText, decodeTable) = makeNTokens (textToSimpleTokens inputList) (make_tokens args)
-  print encodedText
+  print $ head encodedText
