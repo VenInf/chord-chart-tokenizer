@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Eta reduce" #-}
 
 module Tokenizer
     (textToSimpleTokens
@@ -7,9 +8,11 @@ module Tokenizer
     ,makeOneToken
     ,makeNTokens
     ,tokensToText
+    ,topNTokens
+    ,humanReadebleRankings
     ) where
 
-import Data.List (nub, group, sort, maximumBy)
+import Data.List (nub, group, sort, maximumBy, sortBy)
 import qualified Data.Map.Strict as Map
 import GHC.Exception (underflowException)
 import Data.Function (on)
@@ -33,7 +36,9 @@ textToSimpleTokens txt = (encodedTxt, decodeTable)
         
 tokensToText :: ([TokenID], [(TokenID, String)]) -> Text
 tokensToText (encodedTxt, decodeTable) = unwords $ map (\t ->  fromJust $ lookup t decodeTable) encodedTxt
- 
+
+frequenciesOfElementsMap :: (Foldable t, Ord k, Num a) => t k -> Map.Map k a
+frequenciesOfElementsMap element = foldr (\element counterMap -> Map.insertWith (+) element 1 counterMap ) Map.empty element
 
 mostFrequentTokenPair :: [TokenID] -> (TokenID, TokenID)
 mostFrequentTokenPair tokens = fst mostFrequent
@@ -42,7 +47,7 @@ mostFrequentTokenPair tokens = fst mostFrequent
           makePairs _ = []
           pairs = makePairs tokens
           
-          frequenciesMap = foldr (\pair counterMap -> Map.insertWith (+) pair 1 counterMap ) Map.empty pairs -- still slow, but better
+          frequenciesMap = frequenciesOfElementsMap pairs -- still slow, but better
           maxBySnd p1@(k1, v1) p2@(k2, v2) = if v1 > v2 then p1 else p2
           mostFrequent = Map.foldrWithKey (\k1 n1 (k2, n2) -> maxBySnd (k1, n1) (k2, n2)) ((0, 0), 0) frequenciesMap
 
@@ -80,6 +85,13 @@ makeNTokens state n
     | n > 0 = makeNTokens (makeOneToken state) (n-1)
     | otherwise = state
 
+topNTokens :: ([TokenID], [(TokenID, String)]) -> Int -> [(TokenID, Int)]
+topNTokens (tokens, decodeTable) n = take n rankings
+    where frequencies = frequenciesOfElementsMap tokens
+          rankings = sortBy (flip compare `on` snd) (Map.toList frequencies)
+
+humanReadebleRankings :: [(TokenID, Int)] -> [(TokenID, String)] -> [(String, Int)]
+humanReadebleRankings rankings decodeTable = map (\(rID,rs) -> (fromJust $ lookup rID decodeTable, rs)) rankings
 
 -- main = do
 --     let txt = "aaabdaaabac"
