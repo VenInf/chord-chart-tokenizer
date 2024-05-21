@@ -13,7 +13,7 @@ import System.Exit
 
 data BPE = BPE {text_path :: FilePath
                ,config_path :: FilePath
-               ,tokenizer_state_path :: FilePath
+               ,load_state_path :: FilePath
                
                ,make_tokens :: Int              
                
@@ -25,7 +25,7 @@ data BPE = BPE {text_path :: FilePath
 defaultArgs = BPE
               {text_path = def &= typFile &= help "Get data for tokenization from file as a text"
               ,config_path = def &= typFile &= help "Specify non-default config file (ignore other flags if using this one)"
-              ,tokenizer_state_path = def &= typFile &= help "Specify a tokenizer save file to continue work (loads it if specified)"
+              ,load_state_path = def &= typFile &= help "Specify a tokenizer save file to continue work (loads it if specified)"
 
               ,make_tokens = 0 &= help "How many tokens should it create"
 
@@ -51,8 +51,9 @@ handleTokenizer tokenizerState args = do
   if save_state_path args /= def
     then saveTo newTokenizerState (save_state_path args) 
     else if give_top_n_tokens args /= 0
-         then print $ humanReadebleRankings (topNTokens newTokenizerState (give_top_n_tokens args)) newTokenizerState
-         else do putStrLn "Finished working"
+         then do putStrLn "Top n tokens with the respective frequencies"
+                 print $ humanReadebleRankings (topNTokens newTokenizerState (give_top_n_tokens args)) newTokenizerState
+         else do putStrLn "No text_path or save_state_path specified, nothing to do"
                  exitSuccess
 
 handlePathArgs :: BPE -> IO()
@@ -60,36 +61,22 @@ handlePathArgs args = do
   if config_path args /= def
     then do putStrLn "Not implemented"
             exitFailure -- loadConfigCase (config_path args)
-    else if tokenizer_state_path args /= def
-         then do tokenizerState <- loadTokenizerState (tokenizer_state_path args)
+    else if load_state_path args /= def
+         then do tokenizerState <- loadTokenizerState (load_state_path args)
                  handleTokenizer tokenizerState args
          else if text_path args /= def
               then do text <- readFile (text_path args)
                       let tokenizerState = textToTokenizerState text
                       handleTokenizer tokenizerState args
-              else do putStrLn "No text_path or tokenizer_state_path specified, fail"
+              else do putStrLn "No text_path or load_state_path specified, fail"
                       exitFailure
 
 
 main :: IO()
 main = do
   args <- cmdArgs defaultArgs
+  putStrLn "Using following arguments"
   print args
   
   handlePathArgs args
-
-
-  -- print "flush args"
-
-
-  -- print "load from config"
-  -- args <- loadBPE
-  -- print args
-
-  -- print "Done"
-
-  -- inputList <- readFile (text_path args)
-  -- let tState = textToTokenizerState inputList
-  -- let resultState = makeNTokens tState (make_tokens args)
-  -- print $ humanReadebleRankings (topNTokens resultState (top_n_tokens args)) resultState
-
+  putStrLn "Done"
