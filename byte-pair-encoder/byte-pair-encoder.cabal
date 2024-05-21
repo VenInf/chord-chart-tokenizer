@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Tokenizer
+      TokenizerNew
   other-modules:
       Paths_byte_pair_encoder
   autogen-modules:
