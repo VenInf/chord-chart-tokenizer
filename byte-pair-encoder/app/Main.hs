@@ -60,20 +60,19 @@ handlePathArgs args = do
   if config_path args /= def
     then do putStrLn "Not implemented"
             exitFailure -- loadConfigCase (config_path args)
-    else if save_state_path args /= def
-         then do tokenizerState <- loadTokenizerState (save_state_path args)
+    else if tokenizer_state_path args /= def
+         then do tokenizerState <- loadTokenizerState (tokenizer_state_path args)
                  handleTokenizer tokenizerState args
          else if text_path args /= def
               then do text <- readFile (text_path args)
                       let tokenizerState = textToTokenizerState text
                       handleTokenizer tokenizerState args
-              else do putStrLn "Both text_path and save_state_path specified, fail"
+              else do putStrLn "No text_path or tokenizer_state_path specified, fail"
                       exitFailure
 
 
 main :: IO()
 main = do
-  print "before"
   args <- cmdArgs defaultArgs
   print args
   
