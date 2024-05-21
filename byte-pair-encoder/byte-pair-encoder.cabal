@@ -25,8 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      StateSaver
       Tokenizer
-      TokenizerNew
   other-modules:
       Paths_byte_pair_encoder
   autogen-modules:
