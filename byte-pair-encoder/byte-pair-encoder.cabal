@@ -38,6 +38,8 @@ library
       base >=4.7 && <5
     , cmdargs
     , containers
+    , tasty
+    , tasty-hunit
   default-language: Haskell2010
 
 executable byte-pair-encoder-exe
@@ -54,6 +56,8 @@ executable byte-pair-encoder-exe
     , byte-pair-encoder
     , cmdargs
     , containers
+    , tasty
+    , tasty-hunit
   default-language: Haskell2010
 
 test-suite byte-pair-encoder-test
@@ -71,4 +75,6 @@ test-suite byte-pair-encoder-test
     , byte-pair-encoder
     , cmdargs
     , containers
+    , tasty
+    , tasty-hunit
   default-language: Haskell2010

@@ -15,7 +15,7 @@ type TokenID = Int
 data TokenizerState = TokenizerState {text :: String,
                                       encodedText :: [TokenID],
                                       decodeTable :: [(TokenID, String)]
-                                      } deriving (Show, Read)
+                                      } deriving (Show, Eq, Read)
 
 toFst :: (b -> a) -> b -> (a, b)
 toFst f a = (f a, a)
