@@ -37,7 +37,7 @@ import Tokenizer
 
 tests :: TestTree
 tests = 
-    testGroup "tokeinzer tests" [textToStateTests, tokenCreationTests, topTokensTest]
+    testGroup "tokeinzer tests" [textToStateTests, tokenCreationTests, topTokensTest, topTokensInTextTest]
   where {
     textToStateTests = testGroup "text conversion tests" [
         testCase "wikipedia text to state" $ textToTokenizerState "aaabdaaabac" @?= (
@@ -69,7 +69,14 @@ tests =
     topTokensTest = testGroup "top token tests" [
         testCase "top tokens from wikipedia example" $  topNTokens (makeNTokens (textToTokenizerState "aaabdaaabac") 2) 5 @?= (
                 [(98,2),(102,2),(97,1),(99,1),(100,1)])
+        ];
+
+    topTokensInTextTest = testGroup "conversion back to text" [
+        testCase "top tokens from wikipedia example" $  tokenizerStateToText (makeNTokens (textToTokenizerState "aaabdaaabac") 2) @?= (
+                "aaa b d aaa b a c")
         ]
+    
+    
     }
 
 main :: IO ()
