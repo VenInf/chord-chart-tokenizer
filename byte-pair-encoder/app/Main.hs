@@ -59,8 +59,8 @@ handleTokenizer tokenizerState args = do
 handlePathArgs :: BPE -> IO()
 handlePathArgs args = do
   if config_path args /= def
-    then do putStrLn "Not implemented"
-            exitFailure -- loadConfigCase (config_path args)
+    then do putStrLn "Not implemented" -- loadConfigCase (config_path args)
+            exitFailure
     else if load_state_path args /= def
          then do tokenizerState <- loadTokenizerState (load_state_path args)
                  handleTokenizer tokenizerState args
