@@ -1,80 +1,42 @@
-cabal-version: 2.2
+cabal-version:      3.4
+name:               byte-pair-encoder
+version:            0.1.0.0
+license:            BSD-3-Clause
+author:             George Gerasev
+maintainer:         george30032002@gmail.com
+build-type:         Simple
 
--- This file has been generated from package.yaml by hpack version 0.36.0.
---
--- see: https://github.com/sol/hpack
-
-name:           byte-pair-encoder
-version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/byte-pair-encoder#readme>
-homepage:       https://github.com/githubuser/byte-pair-encoder#readme
-bug-reports:    https://github.com/githubuser/byte-pair-encoder/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2024 Author name here
-license:        BSD-3-Clause
-license-file:   LICENSE
-build-type:     Simple
-extra-source-files:
-    README.md
-    CHANGELOG.md
-
-source-repository head
-  type: git
-  location: https://github.com/githubuser/byte-pair-encoder
+common warnings
+    ghc-options: -Wall
 
 library
-  exposed-modules:
-      StateSaver
-      Tokenizer
-  other-modules:
-      Paths_byte_pair_encoder
-  autogen-modules:
-      Paths_byte_pair_encoder
-  hs-source-dirs:
-      src
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
-  build-depends:
-      base >=4.7 && <5
-    , cmdargs
-    , containers
-    , tasty
-    , tasty-hunit
-  default-language: Haskell2010
+    import:           warnings
+    exposed-modules: StateSaver
+                     Tokenizer
+    build-depends:
+          base >=4.7 && <5
+        , containers
+    hs-source-dirs:   lib
+    default-language: Haskell2010
 
-executable byte-pair-encoder-exe
-  main-is: Main.hs
-  other-modules:
-      Paths_byte_pair_encoder
-  autogen-modules:
-      Paths_byte_pair_encoder
-  hs-source-dirs:
-      app
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      base >=4.7 && <5
-    , byte-pair-encoder
-    , cmdargs
-    , containers
-    , tasty
-    , tasty-hunit
-  default-language: Haskell2010
+executable byte-pair-encoder
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+          base >=4.7 && <5
+        , cmdargs
+        , byte-pair-encoder
+    hs-source-dirs:   exe
+    default-language: Haskell2010
 
 test-suite byte-pair-encoder-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_byte_pair_encoder
-  autogen-modules:
-      Paths_byte_pair_encoder
-  hs-source-dirs:
-      test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      base >=4.7 && <5
-    , byte-pair-encoder
-    , cmdargs
-    , containers
-    , tasty
-    , tasty-hunit
-  default-language: Haskell2010
+    import:           warnings
+    default-language: Haskell2010
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Spec.hs
+    build-depends:
+        base >=4.7 && <5
+      , tasty
+      , tasty-hunit
+      , byte-pair-encoder

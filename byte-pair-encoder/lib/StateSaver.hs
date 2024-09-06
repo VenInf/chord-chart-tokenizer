@@ -1,6 +1,6 @@
 module StateSaver where
 
-import Tokenizer
+import           Tokenizer
 
 saveTo :: Show a => a -> FilePath -> IO ()
 saveTo tState filePath = do

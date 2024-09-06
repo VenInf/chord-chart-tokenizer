@@ -5,23 +5,24 @@
 
 module Main (main) where
 
-import System.Console.CmdArgs
-import Tokenizer
-import StateSaver (saveTo)
-import Tokenizer (textToTokenizerState, TokenizerState)
-import System.Exit 
+import           StateSaver             (saveTo)
+import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
+                                         help, typFile, (&=))
+import           System.Exit
+import           Tokenizer
 
-data BPE = BPE {text_path :: FilePath
-               ,config_path :: FilePath
-               ,load_state_path :: FilePath
-               
-               ,make_tokens :: Int              
-               
-               ,save_state_path :: FilePath
+data BPE = BPE {text_path         :: FilePath
+               ,config_path       :: FilePath
+               ,load_state_path   :: FilePath
+
+               ,make_tokens       :: Int
+
+               ,save_state_path   :: FilePath
                ,give_top_n_tokens :: Int
                }
                deriving (Show, Read, Data, Typeable)
 
+defaultArgs :: BPE
 defaultArgs = BPE
               {text_path = def &= typFile &= help "Get data for tokenization from file as a text"
               ,config_path = def &= typFile &= help "Specify non-default config file (ignore other flags if using this one)"
@@ -49,7 +50,7 @@ handleTokenizer :: TokenizerState -> BPE -> IO()
 handleTokenizer tokenizerState args = do
   let newTokenizerState = makeNTokens tokenizerState (make_tokens args)
   if save_state_path args /= def
-    then saveTo newTokenizerState (save_state_path args) 
+    then saveTo newTokenizerState (save_state_path args)
     else if give_top_n_tokens args /= 0
          then do putStrLn "Top n tokens with the respective frequencies"
                  print $ humanReadebleRankings (topNTokens newTokenizerState (give_top_n_tokens args)) newTokenizerState
@@ -77,6 +78,6 @@ main = do
   args <- cmdArgs defaultArgs
   putStrLn "Using following arguments"
   print args
-  
+
   handlePathArgs args
   putStrLn "Done"
