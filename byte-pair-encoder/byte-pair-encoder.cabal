@@ -11,8 +11,9 @@ common warnings
 
 library
     import:           warnings
-    exposed-modules: StateSaver
-                     Tokenizer
+    exposed-modules:
+        StateSaver
+        Tokenizer
     build-depends:
           base >=4.7 && <5
         , containers
