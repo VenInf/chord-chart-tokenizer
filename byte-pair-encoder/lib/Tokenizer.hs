@@ -5,9 +5,12 @@
 module Tokenizer where
 
 import           Data.Function   (on)
-import           Data.List       (nub, sortBy)
+import           Data.List ( nub, sortBy, sortOn )
+import           Data.List.Extra (replace, splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
+import           Data.Hashable   (hash)
+import Data.List (intercalate)
 
 type Text = String
 type TokenID = Int
@@ -23,12 +26,26 @@ toFst f a = (f a, a)
 fmapToFst :: Functor f => (a -> b) -> f a -> f (b, a)
 fmapToFst = fmap . toFst
 
+encode :: Text -> [(TokenID, String)] -> [TokenID]
+encode txt (d:decodeTable) = intercalate [fst d] restEncoded
+    where
+        restEncoded = map (`encode` decodeTable) $ splitOn (snd d) txt
+encode _ [] = []
+
 textToTokenizerState :: Text -> TokenizerState
 textToTokenizerState txt = TokenizerState {text = txt, encodedText = encodedTxt, decodeTable = decodeTable}
     where
-          encodedTxt = map fromEnum txt
-          charsDecodeTable = fmapToFst fromEnum (nub txt)
-          decodeTable = map (\(a, b) -> (a, [b])) charsDecodeTable
+        encodedTxt = map fromEnum txt
+        charsDecodeTable = fmapToFst fromEnum (nub txt)
+        decodeTable = map (\(a, b) -> (a, [b])) charsDecodeTable
+
+textToTokenizerStateWithDict :: Text -> [String] -> TokenizerState
+textToTokenizerStateWithDict txt dict = TokenizerState {text = txt, encodedText = encodedTxt, decodeTable = decodeTable}
+    where
+        filteredTxt = filter (`notElem` dict) (map (:[]) (nub txt))
+        decodeTable = sortOn (\(_, b) -> negate $ length b) $ fmapToFst hash (dict <> filteredTxt)
+        encodedTxt = encode txt decodeTable
+
 
 tokenizerStateToText :: TokenizerState -> Text
 tokenizerStateToText (TokenizerState {..}) = txt

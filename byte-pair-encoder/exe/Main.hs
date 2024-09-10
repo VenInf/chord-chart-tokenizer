@@ -11,27 +11,29 @@ import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
 import           System.Exit
 import           Tokenizer
 
-data BPE = BPE {text_path         :: FilePath
-               ,config_path       :: FilePath
-               ,load_state_path   :: FilePath
+data BPE = BPE { text_path         :: FilePath
+               , dict_path         :: FilePath
+               , config_path       :: FilePath
+               , load_state_path   :: FilePath
 
-               ,make_tokens       :: Int
+               , make_tokens       :: Int
 
-               ,save_state_path   :: FilePath
-               ,give_top_n_tokens :: Int
+               , save_state_path   :: FilePath
+               , give_top_n_tokens :: Int
                }
                deriving (Show, Read, Data, Typeable)
 
 defaultArgs :: BPE
 defaultArgs = BPE
-              {text_path = def &= typFile &= help "Get data for tokenization from file as a text"
-              ,config_path = def &= typFile &= help "Specify non-default config file (ignore other flags if using this one)"
-              ,load_state_path = def &= typFile &= help "Specify a tokenizer save file to continue work (loads it if specified)"
+              { text_path = def &= typFile &= help "Get data for tokenization from file as a text"
+              , dict_path = def &= typFile &= help "Get token's dictionary from file, each token on a separate line"
+              , config_path = def &= typFile &= help "Specify non-default config file (ignore other flags if using this one)"
+              , load_state_path = def &= typFile &= help "Specify a tokenizer save file to continue work (loads it if specified)"
 
-              ,make_tokens = 0 &= help "How many tokens should it create"
+              , make_tokens = 0 &= help "How many tokens should it create"
 
-              ,save_state_path = def &= typFile &= help "If specified, saves the internal state in the path"
-              ,give_top_n_tokens = 0 &= help "Gives top n tokens as an output"
+              , save_state_path = def &= typFile &= help "If specified, saves the internal state in the path"
+              , give_top_n_tokens = 0 &= help "Gives top n tokens as an output"
               }
 
 loadBPE :: FilePath -> IO BPE
@@ -54,7 +56,7 @@ handleTokenizer tokenizerState args = do
     else if give_top_n_tokens args /= 0
          then do putStrLn "Top n tokens with the respective frequencies"
                  print $ humanReadebleRankings (topNTokens newTokenizerState (give_top_n_tokens args)) newTokenizerState
-         else do putStrLn "No text_path or save_state_path specified, nothing to do"
+         else do putStrLn "No give_top_n_tokens or save_state_path specified, nothing to do"
                  exitSuccess
 
 handlePathArgs :: BPE -> IO()
@@ -65,12 +67,18 @@ handlePathArgs args = do
     else if load_state_path args /= def
          then do tokenizerState <- loadTokenizerState (load_state_path args)
                  handleTokenizer tokenizerState args
-         else if text_path args /= def
-              then do text <- readFile (text_path args)
-                      let tokenizerState = textToTokenizerState text
-                      handleTokenizer tokenizerState args
-              else do putStrLn "No text_path or load_state_path specified, fail"
+         else if text_path args == def
+              then do putStrLn "No text_path or load_state_path specified, fail"
                       exitFailure
+              else if dict_path args == def
+                   then do txt <- readFile (text_path args)
+                           let tokenizerState = textToTokenizerState txt
+                           handleTokenizer tokenizerState args
+                   else do txt <- readFile (text_path args)
+                           dict <- readFile (dict_path args)
+                           let tokenizerState = textToTokenizerStateWithDict txt (lines dict)
+                           handleTokenizer tokenizerState args
+
 
 
 main :: IO()
