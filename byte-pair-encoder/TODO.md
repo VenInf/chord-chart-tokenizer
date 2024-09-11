@@ -1,6 +1,6 @@
 ## TODO
 
-- [] Dictionary symbols parser
+- [x] Dictionary symbols parser
 - [] Multi line BPE mode
 - [] Table analysis output
 - [] State monad

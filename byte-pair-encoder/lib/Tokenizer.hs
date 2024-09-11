@@ -5,12 +5,11 @@
 module Tokenizer where
 
 import           Data.Function   (on)
-import           Data.List ( nub, sortBy, sortOn )
-import           Data.List.Extra (replace, splitOn)
+import           Data.Hashable   (hash)
+import           Data.List       (intercalate, nub, sortBy, sortOn)
+import           Data.List.Extra (splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
-import           Data.Hashable   (hash)
-import Data.List (intercalate)
 
 type Text = String
 type TokenID = Int

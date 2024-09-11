@@ -26,7 +26,7 @@ data BPE = BPE { text_path         :: FilePath
 defaultArgs :: BPE
 defaultArgs = BPE
               { text_path = def &= typFile &= help "Get data for tokenization from file as a text"
-              , dict_path = def &= typFile &= help "Get token's dictionary from file, each token on a separate line"
+              , dict_path = def &= typFile &= help "Token's dictionary file, each token on a separate line, higher have a priority"
               , config_path = def &= typFile &= help "Specify non-default config file (ignore other flags if using this one)"
               , load_state_path = def &= typFile &= help "Specify a tokenizer save file to continue work (loads it if specified)"
 
