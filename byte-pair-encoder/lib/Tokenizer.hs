@@ -11,13 +11,12 @@ import           Data.List.Extra (splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
 
-type Text = String
 type TokenID = Int
 
-data TokenizerState = TokenizerState {text        :: String,
-                                      encodedText :: [TokenID],
-                                      decodeTable :: [(TokenID, String)]
-                                      } deriving (Show, Eq, Read)
+data TokenizerState = TokenizerState { texts        :: [String]
+                                     , encodedTexts :: [[TokenID]]
+                                     , decodeTable  :: [(TokenID, String)]
+                                     } deriving (Show, Eq, Read)
 
 toFst :: (b -> a) -> b -> (a, b)
 toFst f a = (f a, a)
@@ -25,40 +24,35 @@ toFst f a = (f a, a)
 fmapToFst :: Functor f => (a -> b) -> f a -> f (b, a)
 fmapToFst = fmap . toFst
 
-encode :: Text -> [(TokenID, String)] -> [TokenID]
+encode :: String -> [(TokenID, String)] -> [TokenID]
 encode txt (d:decodeTable) = intercalate [fst d] restEncoded
     where
         restEncoded = map (`encode` decodeTable) $ splitOn (snd d) txt
 encode _ [] = []
 
-textToTokenizerState :: Text -> TokenizerState
-textToTokenizerState txt = TokenizerState {text = txt, encodedText = encodedTxt, decodeTable = decodeTable}
+textToTokenizerStateWithDict :: [String] -> [String] -> TokenizerState
+textToTokenizerStateWithDict txts dict = TokenizerState {texts = txts, encodedTexts = encodedTxts, decodeTable = decodeTable}
     where
-        encodedTxt = map fromEnum txt
-        charsDecodeTable = fmapToFst fromEnum (nub txt)
-        decodeTable = map (\(a, b) -> (a, [b])) charsDecodeTable
-
-textToTokenizerStateWithDict :: Text -> [String] -> TokenizerState
-textToTokenizerStateWithDict txt dict = TokenizerState {text = txt, encodedText = encodedTxt, decodeTable = decodeTable}
-    where
-        filteredTxt = filter (`notElem` dict) (map (:[]) (nub txt))
+        filteredTxt = filter (`notElem` dict) (map (:[]) (nub $ concat txts))
         decodeTable = sortOn (\(_, b) -> negate $ length b) $ fmapToFst hash (dict <> filteredTxt)
-        encodedTxt = encode txt decodeTable
+        encodedTxts = map (`encode` decodeTable) txts
 
 
-tokenizerStateToText :: TokenizerState -> Text
-tokenizerStateToText (TokenizerState {..}) = txt
-    where txt = unwords $ map (\t ->  fromJust $ lookup t decodeTable) encodedText
+tokenizerStateToTexts :: TokenizerState -> [String]
+tokenizerStateToTexts (TokenizerState {..}) = map decodeText encodedTexts
+    where
+        decodeText :: [TokenID] -> String
+        decodeText encTxt = unwords $ map (\t ->  fromJust $ lookup t decodeTable) encTxt
 
 frequenciesOfElementsMap :: (Foldable t, Ord k, Num a) => t k -> Map.Map k a
-frequenciesOfElementsMap element = foldr (\element counterMap -> Map.insertWith (+) element 1 counterMap ) Map.empty element
+frequenciesOfElementsMap element = foldr (\elmnt counterMap -> Map.insertWith (+) elmnt 1 counterMap ) Map.empty element
 
 mostFrequentTokenPair :: TokenizerState -> (TokenID, TokenID)
-mostFrequentTokenPair (TokenizerState {encodedText = tokens}) = fst mostFrequent
+mostFrequentTokenPair (TokenizerState {encodedTexts = tokens}) = fst mostFrequent
     where
           makePairs (a:b:t) = (a, b) : makePairs (b:t)
           makePairs _       = []
-          pairs = makePairs tokens
+          pairs = concatMap makePairs tokens
 
           frequenciesMap = frequenciesOfElementsMap pairs -- still slow, but better
           maxBySnd p1@(_, v1) p2@(_, v2) = if v1 > v2 then p1 else p2
@@ -75,7 +69,7 @@ tokenByValue :: String -> [(TokenID, String)] -> TokenID -- second value lookup
 tokenByValue value decodeTable = fst $ head $ filter (\(_, v) -> v == value) decodeTable
 
 mergeTokenPair :: TokenizerState -> (TokenID, TokenID) -> TokenizerState
-mergeTokenPair tState@(TokenizerState {encodedText = encodedText, decodeTable = decodeTable}) (t1, t2) = newState
+mergeTokenPair tState@(TokenizerState {encodedTexts = encodedTexts, decodeTable = decodeTable}) (t1, t2) = newState
     where tokenValue1 = fromJust $ lookup t1 decodeTable
           tokenValue2 = fromJust $ lookup t2 decodeTable
           newTokenValue = tokenValue1 ++ tokenValue2
@@ -87,7 +81,7 @@ mergeTokenPair tState@(TokenizerState {encodedText = encodedText, decodeTable = 
           replacePairs [b] = [b]
           replacePairs [] = []
 
-          newState = tState {encodedText = replacePairs encodedText}
+          newState = tState {encodedTexts = map replacePairs encodedTexts}
 
 makeOneToken :: TokenizerState -> TokenizerState
 makeOneToken tState = mergedTokenState
@@ -101,8 +95,8 @@ makeNTokens tState n
     | otherwise = tState
 
 topNTokens :: TokenizerState -> Int -> [(TokenID, Int)]
-topNTokens TokenizerState {encodedText = tokens} n = take n rankings
-    where frequencies = frequenciesOfElementsMap tokens
+topNTokens TokenizerState {encodedTexts = encodedTexts} n = take n rankings
+    where frequencies = frequenciesOfElementsMap $ concat encodedTexts
           rankings = sortBy (flip compare `on` snd) (Map.toList frequencies)
 
 humanReadebleRankings :: [(TokenID, Int)] -> TokenizerState -> [(String, Int)]

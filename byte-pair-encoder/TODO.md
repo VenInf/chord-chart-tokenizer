@@ -1,7 +1,9 @@
 ## TODO
 
 - [x] Dictionary symbols parser
-- [] Multi line BPE mode
+- [x] Multi line BPE mode
+- [x] Fix for tone range to `[-5, 6]`
+- [] Merge everyting to M, M7, 7
 - [] Table analysis output
 - [] State monad
 - [x] Tokenizer State

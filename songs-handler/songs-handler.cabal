@@ -22,16 +22,3 @@ executable songs-handler
         , containers
     hs-source-dirs:   exe
     default-language: Haskell2010
-
-executable relative-notation
-    import:           warnings
-    main-is:          Main.hs
-    build-depends:
-          base
-        , directory
-        , filepath
-        , aeson
-        , split
-        , containers
-    hs-source-dirs:   relative-notation
-    default-language: Haskell2010

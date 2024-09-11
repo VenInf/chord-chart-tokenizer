@@ -10,6 +10,7 @@ import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
 import           Tokenizer
+import Colonnade
 
 data BPE = BPE { text_path         :: FilePath
                , dict_path         :: FilePath
@@ -36,6 +37,35 @@ defaultArgs = BPE
               , give_top_n_tokens = 0 &= help "Gives top n tokens as an output"
               }
 
+
+colBPE :: Colonnade Headed BPE String
+colBPE = mconcat
+        [ headed "Text" text_path
+        , headed "Dictionary" dict_path
+        , headed "Config" config_path
+        , headed "Load state" load_state_path
+        , headed "Make n tokens" (show . make_tokens)
+        , headed "Save to" save_state_path
+        , headed "Show n tokens" (show . give_top_n_tokens)
+        ]
+
+data Ranks = Ranks { place :: Int
+                   , token :: String
+                   , amount :: Int
+                   } deriving (Show)
+
+pairToRanks :: [(String, Int)] -> [Ranks]
+pairToRanks tokenAmounts = zipWith ($) ranksWithPlaces tokenAmounts
+    where
+        ranksWithPlaces = [uncurry (Ranks p) | p <- [1..]]
+
+colRanks :: Colonnade Headed Ranks String
+colRanks = mconcat
+        [ headed "Place" (show . place)
+        , headed "Token" token
+        , headed "Amount" (show . amount)
+        ]
+
 loadBPE :: FilePath -> IO BPE
 loadBPE configurationPath = do
   bpeString <- readFile configurationPath
@@ -55,7 +85,8 @@ handleTokenizer tokenizerState args = do
     then saveTo newTokenizerState (save_state_path args)
     else if give_top_n_tokens args /= 0
          then do putStrLn "Top n tokens with the respective frequencies"
-                 print $ humanReadebleRankings (topNTokens newTokenizerState (give_top_n_tokens args)) newTokenizerState
+                 let tokenAmounts = humanReadebleRankings (topNTokens newTokenizerState (give_top_n_tokens args)) newTokenizerState
+                 putStrLn $ ascii colRanks $ pairToRanks tokenAmounts
          else do putStrLn "No give_top_n_tokens or save_state_path specified, nothing to do"
                  exitSuccess
 
@@ -72,11 +103,11 @@ handlePathArgs args = do
                       exitFailure
               else if dict_path args == def
                    then do txt <- readFile (text_path args)
-                           let tokenizerState = textToTokenizerState txt
+                           let tokenizerState = textToTokenizerStateWithDict (lines txt) []
                            handleTokenizer tokenizerState args
                    else do txt <- readFile (text_path args)
                            dict <- readFile (dict_path args)
-                           let tokenizerState = textToTokenizerStateWithDict txt (lines dict)
+                           let tokenizerState = textToTokenizerStateWithDict (lines txt) (lines dict)
                            handleTokenizer tokenizerState args
 
 
@@ -84,8 +115,8 @@ handlePathArgs args = do
 main :: IO()
 main = do
   args <- cmdArgs defaultArgs
-  putStrLn "Using following arguments"
-  print args
+  putStrLn "Using following arguments:"
+  putStrLn (ascii colBPE [args])
 
   handlePathArgs args
   putStrLn "Done"

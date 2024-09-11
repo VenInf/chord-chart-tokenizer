@@ -6,7 +6,6 @@
 module Main where
 
 import           Data.Aeson
-import           Data.Char
 import           Data.List
 import           Data.List.Split
 import           GHC.Generics
@@ -14,7 +13,7 @@ import           System.Directory
 import           System.FilePath
 
 songsDir :: FilePath
-songsDir = "./data"
+songsDir = "./songs-handler/data"
 
 notesOrder :: [String]
 notesOrder = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
@@ -41,9 +40,11 @@ data Chord = Chord {
 } deriving (Generic, Show, ToJSON, FromJSON)
 
 showDiff :: Int -> String
-showDiff n = if n > 0
-             then "(+" ++ show n ++ ")"
-             else "(" ++ show n ++ ")"
+showDiff n
+  | n < -5    = showDiff (n + 12)
+  | n > 6     = showDiff (n - 12)
+  | n > 0     = "(+" ++ show n ++ ")"
+  | otherwise = "(" ++ show n ++ ")"
 
 contentToChords :: String -> [Chord]
 contentToChords content = map (normalizeChord . rawToChord) cordsRawNoNC
@@ -56,8 +57,8 @@ contentToChords content = map (normalizeChord . rawToChord) cordsRawNoNC
     rawToChord chordRaw =
       case chordRaw of
         [] -> Chord [] []
-        [note, 'b'] -> Chord [note, 'b'] "_"
-        [note, '#'] -> Chord [note, '#'] "_"
+        [note, 'b'] -> Chord [note, 'b'] "M" -- we will note major as M
+        [note, '#'] -> Chord [note, '#'] "M"
         [note] -> Chord [note] "_"
         (note:'b':sept) -> Chord [note, 'b'] sept
         (note:'#':sept) -> Chord [note, '#'] sept
@@ -81,7 +82,7 @@ normalizeChord (Chord {..}) = Chord normNote noAltBaseSept
               n -> n
 
     noAltBaseSept = if '/' `elem` sept
-               then head $ splitOn "/" sept -- give everyting before altered base
+               then head $ splitOn "/" sept -- drop everyting after altered base
                else sept
 
 
@@ -103,33 +104,6 @@ chordsToDiff chords = (concat . transpose) [septs, relativeNoNotes]
 
     relativeNoNotes = map (uncurry chordDiff) (makePairs chords)
     septs = map sept chords
-
-
-makeContentRelative :: String -> String
-makeContentRelative content = unwords $ joinRaw relativeRaw
-    where
-        unbared = filter (/= '|') content
-        cords = splitOn " " $ unwords $ words unbared
-        cordPairs = makePairs cords
-        relativeRaw = map twoCordsToRelative cordPairs
-
-        makePairs (a:b:t) = (a, b) : makePairs (b:t)
-        makePairs _       = []
-
-        joinRaw :: [(String, String, String)] -> [String]
-        joinRaw [(sept1, df1, common1), (common2, df2, sept2)] =
-            if common1 == common2
-            then [sept1, df1, common1, df2, sept2]
-            else error $ "common 1 (" ++ show common1 ++ ") and common 2 (" ++ show common2 ++ "aren't equal"
-        joinRaw ((sept1, df1, common1):(common2, df2, sept2):rest) =
-            if common1 == common2
-            then [sept1, df1] ++ joinRaw ((common2, df2, sept2):rest)
-            else error $ "common 1 (" ++ show common1 ++ ") and common 2 (" ++ show common2 ++ "aren't equal"
-        joinRaw _ = []
-
-twoCordsToRelative :: (String, String) -> (String, String, String)
-twoCordsToRelative (note1:sept1, note2:sept2) = (sept1, showDiff $ ord note2 - ord note1, sept2)
-twoCordsToRelative _ = error "wrong chords format"
 
 contentToSong :: String -> Song
 contentToSong input = go $ lines input
@@ -162,7 +136,10 @@ main = do
     let diffs = map diffView songs
 
     -- encodeFile "./out/allSongs.json" (Songs songs)
-    -- mapM_ putStrLn diffs
-    putStrLn "all possible symbols:"
-    print $ sort $ nub $ words $ unlines diffs
-    putStrLn "Done"
+
+    mapM_ putStrLn diffs
+
+    -- putStrLn "all possible symbols:"
+    -- print $ sort $ nub $ words $ unlines diffs
+
+    -- putStrLn "Done"
