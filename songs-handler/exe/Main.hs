@@ -37,7 +37,7 @@ newtype Songs
 data Chord = Chord {
       note :: String
     , sept :: String
-} deriving (Generic, Show, ToJSON, FromJSON)
+} deriving (Generic, Show, Eq, ToJSON, FromJSON)
 
 showDiff :: Int -> String
 showDiff n
@@ -47,7 +47,7 @@ showDiff n
   | otherwise = "(" ++ show n ++ ")"
 
 contentToChords :: String -> [Chord]
-contentToChords content = map (normalizeChord . rawToChord) cordsRawNoNC
+contentToChords content = filterRepeatingChords $ map (normalizeChord . rawToChord) cordsRawNoNC
   where
     unbared = filter (/= '|') content
     cordsRaw = splitOn " " $ unwords $ words unbared
@@ -59,13 +59,19 @@ contentToChords content = map (normalizeChord . rawToChord) cordsRawNoNC
         [] -> Chord [] []
         [note, 'b'] -> Chord [note, 'b'] "M" -- we will note major as M
         [note, '#'] -> Chord [note, '#'] "M"
-        [note] -> Chord [note] "_"
+        [note] -> Chord [note] "M"
         (note:'b':sept) -> Chord [note, 'b'] sept
         (note:'#':sept) -> Chord [note, '#'] sept
         (note:sept) -> Chord [note] sept
 
+    filterRepeatingChords :: [Chord] -> [Chord]
+    filterRepeatingChords (c1:c2:chords)
+      | c1 == c2 = filterRepeatingChords (c2:chords)
+      | otherwise = c1: filterRepeatingChords (c2:chords)
+    filterRepeatingChords c = c
+
 normalizeChord :: Chord -> Chord
-normalizeChord (Chord {..}) = Chord normNote noAltBaseSept
+normalizeChord (Chord {..}) = Chord normNote (trivializeSept noAltBaseSept)
   where
     normNote = case note of
               "Fb" -> "E"
@@ -84,6 +90,13 @@ normalizeChord (Chord {..}) = Chord normNote noAltBaseSept
     noAltBaseSept = if '/' `elem` sept
                then head $ splitOn "/" sept -- drop everyting after altered base
                else sept
+
+    trivializeSept spt
+      | "6" `isPrefixOf` spt  = "M7"
+      | "M" `isPrefixOf` spt  = "M7"
+      | "m" `isPrefixOf` spt  = "m7"
+      | "o7" `isPrefixOf` spt = "m7"
+      | otherwise             = "7"
 
 
 chordsToDiff :: [Chord] -> [String]
@@ -121,7 +134,6 @@ contentToSong input = go $ lines input
         bars = rmBeforeEqSign barsL
         content = filter (/= '\n') $ unlines contentL
         chords =  contentToChords content
-        -- diffView = []
         diffView = unwords $ chordsToDiff chords
     go _ = error "unexpected number of lines"
 

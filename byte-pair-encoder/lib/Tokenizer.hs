@@ -94,6 +94,11 @@ makeNTokens tState n
     | n > 0 = makeNTokens (makeOneToken tState) (n-1)
     | otherwise = tState
 
+topTokens :: TokenizerState -> [(TokenID, Int)]
+topTokens TokenizerState {encodedTexts = encodedTexts} = rankings
+    where frequencies = frequenciesOfElementsMap $ concat encodedTexts
+          rankings = sortBy (flip compare `on` snd) (Map.toList frequencies)
+
 topNTokens :: TokenizerState -> Int -> [(TokenID, Int)]
 topNTokens TokenizerState {encodedTexts = encodedTexts} n = take n rankings
     where frequencies = frequenciesOfElementsMap $ concat encodedTexts
