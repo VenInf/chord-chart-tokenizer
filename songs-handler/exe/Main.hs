@@ -18,7 +18,6 @@ songsDir = "./songs-handler/data"
 notesOrder :: [String]
 notesOrder = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
 
-
 data Song = Song {
       title      :: String
     , composedBy :: String
@@ -134,7 +133,7 @@ contentToSong input = go $ lines input
         bars = rmBeforeEqSign barsL
         content = filter (/= '\n') $ unlines contentL
         chords =  contentToChords content
-        diffView = unwords $ chordsToDiff chords
+        diffView = concat $ chordsToDiff chords
     go _ = error "unexpected number of lines"
 
 
@@ -145,13 +144,13 @@ main = do
     songsContents <- mapM readFile songsPaths
 
     let songs = map contentToSong songsContents
-    let diffs = map diffView songs
+        diffs = map diffView songs
 
     -- encodeFile "./out/allSongs.json" (Songs songs)
-
-    mapM_ putStrLn diffs
 
     -- putStrLn "all possible symbols:"
     -- print $ sort $ nub $ words $ unlines diffs
 
     -- putStrLn "Done"
+    mapM_ putStrLn diffs
+

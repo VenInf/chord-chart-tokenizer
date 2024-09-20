@@ -33,16 +33,17 @@ encode _ [] = []
 textToTokenizerStateWithDict :: [String] -> [String] -> TokenizerState
 textToTokenizerStateWithDict txts dict = TokenizerState {texts = txts, encodedTexts = encodedTxts, decodeTable = decodeTable}
     where
-        filteredTxt = filter (`notElem` dict) (map (:[]) (nub $ concat txts))
-        decodeTable = sortOn (\(_, b) -> negate $ length b) $ fmapToFst hash (dict <> filteredTxt)
+        filterDictElem txt d = concat $ d `splitOn` txt
+        filteredTxts = map (\txt -> foldl filterDictElem txt dict) txts
+        decodeTable = sortOn (\(_, b) -> negate $ length b) $ fmapToFst hash (dict <> map (:[]) (concat filteredTxts))
         encodedTxts = map (`encode` decodeTable) txts
 
+decode :: [TokenID] -> [(TokenID, String)] -> String
+decode encTxt decodeTable = unwords $ map (\t ->  fromJust $ lookup t decodeTable) encTxt
 
 tokenizerStateToTexts :: TokenizerState -> [String]
-tokenizerStateToTexts (TokenizerState {..}) = map decodeText encodedTexts
-    where
-        decodeText :: [TokenID] -> String
-        decodeText encTxt = unwords $ map (\t ->  fromJust $ lookup t decodeTable) encTxt
+tokenizerStateToTexts (TokenizerState {..}) = map (`decode` decodeTable) encodedTexts
+
 
 frequenciesOfElementsMap :: (Foldable t, Ord k, Num a) => t k -> Map.Map k a
 frequenciesOfElementsMap element = foldr (\elmnt counterMap -> Map.insertWith (+) elmnt 1 counterMap ) Map.empty element
