@@ -118,7 +118,11 @@ makeReports initialState bpe = go initialState 0
             -- putStrLn $ "Making " ++ stateFileName
             -- saveTo state stateFileName
             Control.Monad.when (repNumber < totalSteps) $ go (makeNTokens state tokensPerStep) (repNumber + 1)
-            Control.Monad.when (repNumber == totalSteps) $ makeFinalReport state (reportDir </> "final-standings.txt")
+            Control.Monad.when (repNumber == totalSteps) $ do
+                makeFinalReport state (reportDir </> "final-standings.txt")
+                let tokens = map snd $ decodeTable state
+                writeFile (reportDir </> "final-tokens.txt") (unlines tokens)
+
 
 
 handlePathArgs :: BPE -> IO()

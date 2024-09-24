@@ -16,6 +16,7 @@ library
         Tokenizer
         TokenizerTriple
         TokenToBlock
+        Common
     build-depends:
           base >=4.7 && <5
         , containers

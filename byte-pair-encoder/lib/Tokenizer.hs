@@ -6,7 +6,7 @@ module Tokenizer where
 
 import           Data.Function   (on)
 import           Data.Hashable   (hash)
-import           Data.List       (intercalate, nub, sortBy, sortOn)
+import           Data.List       (intercalate, sortBy, sortOn)
 import           Data.List.Extra (splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)

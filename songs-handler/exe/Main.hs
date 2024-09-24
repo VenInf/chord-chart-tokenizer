@@ -11,12 +11,15 @@ import           Data.List.Split
 import           GHC.Generics
 import           System.Directory
 import           System.FilePath
+import Common ( notesOrder )
+import Chords
+import SplitByTokens (chordsByTokens)
 
 songsDir :: FilePath
 songsDir = "./songs-handler/data"
 
-notesOrder :: [String]
-notesOrder = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
+tokensPath :: FilePath
+tokensPath = "./songs-handler/tokens/tokens.txt"
 
 data Song = Song {
       title      :: String
@@ -27,16 +30,12 @@ data Song = Song {
     , content    :: String
     , chords     :: [Chord]
     , diffView   :: String
+    , tokenView  :: [String]
     } deriving (Generic, Show, ToJSON, FromJSON)
 
 newtype Songs
   = Songs {songs :: [Song]}
   deriving (Generic, Show, ToJSON, FromJSON)
-
-data Chord = Chord {
-      note :: String
-    , sept :: String
-} deriving (Generic, Show, Eq, ToJSON, FromJSON)
 
 showDiff :: Int -> String
 showDiff n
@@ -52,51 +51,11 @@ contentToChords content = filterRepeatingChords $ map (normalizeChord . rawToCho
     cordsRaw = splitOn " " $ unwords $ words unbared
     cordsRawNoNC = filter (/= "NC") cordsRaw
 
-    rawToChord :: String -> Chord
-    rawToChord chordRaw =
-      case chordRaw of
-        [] -> Chord [] []
-        [note, 'b'] -> Chord [note, 'b'] "M" -- we will note major as M
-        [note, '#'] -> Chord [note, '#'] "M"
-        [note] -> Chord [note] "M"
-        (note:'b':sept) -> Chord [note, 'b'] sept
-        (note:'#':sept) -> Chord [note, '#'] sept
-        (note:sept) -> Chord [note] sept
-
     filterRepeatingChords :: [Chord] -> [Chord]
     filterRepeatingChords (c1:c2:chords)
       | c1 == c2 = filterRepeatingChords (c2:chords)
       | otherwise = c1: filterRepeatingChords (c2:chords)
     filterRepeatingChords c = c
-
-normalizeChord :: Chord -> Chord
-normalizeChord (Chord {..}) = Chord normNote (trivializeSept noAltBaseSept)
-  where
-    normNote = case note of
-              "Fb" -> "E"
-              "Cb" -> "B"
-
-              "C#" -> "Db"
-              "D#" -> "Eb"
-              "E#" -> "F"
-              "F#" -> "Gb"
-              "G#" -> "Ab"
-              "A#" -> "Bb"
-              "B#" -> "C"
-
-              n -> n
-
-    noAltBaseSept = if '/' `elem` sept
-               then head $ splitOn "/" sept -- drop everyting after altered base
-               else sept
-
-    trivializeSept spt
-      | "6" `isPrefixOf` spt  = "M7"
-      | "M" `isPrefixOf` spt  = "M7"
-      | "m" `isPrefixOf` spt  = "m7"
-      | "o7" `isPrefixOf` spt = "m7"
-      | otherwise             = "7"
-
 
 chordsToDiff :: [Chord] -> [String]
 chordsToDiff chords = (concat . transpose) [septs, relativeNoNotes]
@@ -115,10 +74,10 @@ chordsToDiff chords = (concat . transpose) [septs, relativeNoNotes]
     makePairs _       = []
 
     relativeNoNotes = map (uncurry chordDiff) (makePairs chords)
-    septs = map sept chords
+    septs = map septima chords
 
-contentToSong :: String -> Song
-contentToSong input = go $ lines input
+contentToSong :: String -> [String] -> Song
+contentToSong input tokens = go $ lines input
   where
     rmBeforeEqSign :: String -> String
     rmBeforeEqSign l = splitOn " = " l !! 1
@@ -134,6 +93,7 @@ contentToSong input = go $ lines input
         content = filter (/= '\n') $ unlines contentL
         chords =  contentToChords content
         diffView = concat $ chordsToDiff chords
+        tokenView = chordsByTokens (words content) tokens
     go _ = error "unexpected number of lines"
 
 
@@ -143,14 +103,18 @@ main = do
     let songsPaths = [songsDir </> name | name <- songsFileNames]
     songsContents <- mapM readFile songsPaths
 
-    let songs = map contentToSong songsContents
+    rawTokens <- readFile tokensPath
+
+    let tokens = lines rawTokens
+        songs = map (`contentToSong` tokens) songsContents
         diffs = map diffView songs
 
-    -- encodeFile "./out/allSongs.json" (Songs songs)
+
+    encodeFile "./songs-handler/out/allSongs.json" (Songs songs)
+    putStrLn "Done"
 
     -- putStrLn "all possible symbols:"
     -- print $ sort $ nub $ words $ unlines diffs
 
-    -- putStrLn "Done"
-    mapM_ putStrLn diffs
+    -- mapM_ putStrLn diffs
 

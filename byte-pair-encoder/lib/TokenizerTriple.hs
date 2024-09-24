@@ -6,15 +6,13 @@ module TokenizerTriple where
 import Data.List
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
+import Common
 
 import Tokenizer
     ( TokenizerState(TokenizerState, encodedTexts, decodeTable),
       TokenID,
       frequenciesOfElementsMap,
       tokenByValue )
-
-septs :: [String]
-septs = ["M7", "m7", "7"]
 
 adjustFrequenciesByHeuristic :: (Ord k, Num a) => Map.Map k a -> (k -> Bool) -> Map.Map k a
 adjustFrequenciesByHeuristic frequencies isGood = Map.mapWithKey (\key freq -> if isGood key then freq + adjustDiff else freq) frequencies
