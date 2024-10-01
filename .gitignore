@@ -1,3 +1,5 @@
+old/
+
 .stack-work
 *.prof
 *config.txt

@@ -1,10 +1,10 @@
-# BPE-tokenizer-hs
+## The readme is outdated
 
 ### What is this?
 
 This is a CLI tool, that helps create text tokens using a given text file.
 It uses the Byte Pair Encoder algorithm, and can make a specified amount of extra tokens
-(to the addition of the letters used in the text) 
+(to the addition of the letters used in the text)
 
 ### Building
 

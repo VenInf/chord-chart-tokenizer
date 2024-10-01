@@ -1,0 +1,44 @@
+cabal-version:      3.0
+name:               songs-tokenizer
+version:            0.1.0.0
+license-file:       LICENSE
+author:             George Gerasev
+maintainer:         george30032002@gmail.com
+build-type:         Simple
+
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    exposed-modules:
+        SplitByTokens
+        ReportCreator
+    build-depends:
+          base >=4.7 && <5
+        , raw-songs-handler
+        , aeson
+        , containers
+        , safe
+        , split
+        , extra
+        , hashable
+    hs-source-dirs:   lib
+    default-language: Haskell2010
+
+executable songs-tokenizer
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+          base
+        , songs-tokenizer
+        , raw-songs-handler
+        , cmdargs
+        , directory
+        , filepath
+        , aeson
+        , split
+        , containers
+    hs-source-dirs:   exe
+    default-language: Haskell2010

@@ -1,0 +1,35 @@
+cabal-version:      3.0
+name:               raw-songs-handler
+version:            0.1.0.0
+author:             George Gerasev
+maintainer:         george30032002@gmail.com
+build-type:         Simple
+
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    exposed-modules:
+        Chords
+        Songs
+    build-depends:
+          base >=4.7 && <5
+        , aeson
+        , split
+    hs-source-dirs:   lib
+    default-language: Haskell2010
+
+executable raw-songs-handler
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+          base
+        , raw-songs-handler
+        , aeson
+        , cmdargs
+        , directory
+        , filepath
+    hs-source-dirs:   exe
+    default-language: Haskell2010

@@ -1,0 +1,36 @@
+cabal-version:      3.4
+name:               token-creator
+version:            0.1.0.0
+license:            BSD-3-Clause
+author:             George Gerasev
+maintainer:         george30032002@gmail.com
+build-type:         Simple
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    exposed-modules:
+        TokenCreator
+        ReportCreator
+    build-depends:
+          base >=4.7 && <5
+        , raw-songs-handler
+        , containers
+        , split
+        , extra
+        , hashable
+    hs-source-dirs:   lib
+    default-language: Haskell2010
+
+executable token-creator
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+          base >=4.7 && <5
+        , token-creator
+        , cmdargs
+        , colonnade
+    hs-source-dirs:   exe
+    default-language: Haskell2010
