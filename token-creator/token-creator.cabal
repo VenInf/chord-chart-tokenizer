@@ -17,6 +17,8 @@ library
     build-depends:
           base >=4.7 && <5
         , raw-songs-handler
+        , boxes
+        , colonnade
         , containers
         , split
         , extra
@@ -31,6 +33,5 @@ executable token-creator
           base >=4.7 && <5
         , token-creator
         , cmdargs
-        , colonnade
     hs-source-dirs:   exe
     default-language: Haskell2010

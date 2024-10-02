@@ -19,6 +19,7 @@ library
           base >=4.7 && <5
         , raw-songs-handler
         , aeson
+        , colonnade
         , containers
         , safe
         , split
