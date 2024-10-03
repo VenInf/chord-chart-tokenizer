@@ -63,7 +63,6 @@ humanReadebleRankings :: [(TokenID, Int)] -> TokenCreatorState -> [(String, Int)
 humanReadebleRankings rankings (TokenCreatorState {decodeTable = decodeTable}) = map (\(rID,rs) -> (fromJust $ lookup rID decodeTable, rs)) rankings
 
 
-
 adjustFrequenciesByHeuristic :: (Ord k, Num a) => Map.Map k a -> (k -> Bool) -> Map.Map k a
 adjustFrequenciesByHeuristic frequencies isGood = Map.mapWithKey (\key freq -> if isGood key then freq + adjustDiff else freq) frequencies
     where

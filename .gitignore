@@ -1,4 +1,6 @@
 old/
+reports/
+tokens/
 
 .stack-work
 *.prof

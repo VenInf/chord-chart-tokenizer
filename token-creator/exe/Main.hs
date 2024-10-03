@@ -8,7 +8,10 @@ import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
 import           TokenCreator
-import ReportCreator
+import           ReportCreator
+import           Data.List.Split
+import Data.List (intercalate)
+
 
 
 songsInRelativeDir :: FilePath
@@ -19,6 +22,9 @@ reportsDir = "./data/reports/"
 
 tokensDir :: FilePath
 tokensDir = "./data/tokens/"
+
+knownBlocksDir :: FilePath
+knownBlocksDir = "./data/known-blocks/"
 
 
 data CreatorArgs = CreatorArgs
@@ -38,6 +44,19 @@ defaultArgs = CreatorArgs
               , tokens_file = def &= help "A name for the result file with tokens"
               }
 
+getKnownBlocks :: IO [(String, String)]
+getKnownBlocks = do
+    contents <- readFile (knownBlocksDir <> "blocks-norm-notation.txt")
+    let lined = filter (/= "") $ lines contents
+        splited = map (splitOn " : ") lined
+
+        splitToPair :: [String] -> (String, String)
+        splitToPair (name:blk:_) = (name,blk)
+        splitToPair unexpected = error $ "Unable to split by ':' following line:" ++ intercalate " : " unexpected
+
+        namedBlocks = map splitToPair splited
+        noSeparatorsBlocks = map (\(name, blk) ->(name, unwords $ words $ filter (/= '|') blk)) namedBlocks
+    pure noSeparatorsBlocks
 
 main :: IO()
 main = do
@@ -51,10 +70,12 @@ main = do
                                 putStrLn $ "Relative notation input file at " <> (songsInRelativeDir <> notation_file args)
                                 readFile (songsInRelativeDir <> notation_file args)
 
+    namedBlocks <- getKnownBlocks
+
     let initTokenCreatorState = textToTokenizerState $ lines relNotationContents
         finalTokenCreatorState = makeNTokens initTokenCreatorState (make_n_tokens args)
         tokens = map snd $ decodeTable finalTokenCreatorState -- more specific tokens on top
-        report = createReport finalTokenCreatorState
+        report = createReport finalTokenCreatorState namedBlocks
 
     if report_file args == def
     then putStrLn "No report file specified, skip."

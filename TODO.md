@@ -15,15 +15,17 @@
 
 - [x] Refactoring
 - [] Stats after creating tokens
-    - [] Place by addition, amount of tokens, probability of a token, token itself and a block representation
+    - [x] Place by addition, amount of tokens, probability of a token, token itself and a block representation
+    - [x] Precent covered by meaningful tokens
+    - [x] Entropy by Shannon
+    - [] Is token an existing token? A token from a website?
+    - [] What is the total number of found tokens
     - [] The longest, the most popular n tokens
-    - [] Entropy by Shannon
-- [] Stats after tokenization
+- [] Stats after tokenization ?
 
 - [] Get blocks from literature
 - [] Get blocks from websites
 - [] Rewrite readme
-
 
 - [x] Tokenizer State
 - [x] Save state to a file
