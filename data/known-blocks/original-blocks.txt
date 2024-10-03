@@ -1,0 +1,68 @@
+Amen : FΔ | CΔ
+Autumnal : D- (G7) | Bø E7 | AmΔ %
+Body & Soul : D- A7 | D- G7 | CΔ | %
+Dizzy : Ab- | Db7 | CΔ | %
+Dogleg : A- D7 | D- G7 | CΔ | %
+(7-chord) Dropback : D- G7 | CΔ A7 | D- G7 | CΔ
+Extended : A- | D- | G7 | CΔ
+Happenstance : F#- | B7 | CΔ | %
+Long : E- A7 | D- G7 | CΔ | %
+Overrun : D- | G7 | CΔ | FΔ
+Moment’s : C#- F#7 | D- G7 | CΔ | %
+Night & Day : AbΔ | G7 | CΔ | %
+Nobody’s : CΔ | E7 | AmΔ | %
+Nowhere : Ab7 | G7 | CΔ | %
+(7-chord) Pullback : D- G7 | E- A7 | D- G7 | CΔ
+Rainbow (variant) : CΔ | E7 | FΔ | %
+Rainy : E- Ebo | D- G7 | CΔ | %
+Satin : A- D7 | Ab- Db7 | CΔ | %
+Spring : Bø E7 | D- G7 | CΔ | %
+Stablemates : Eb- Ab7 | D- G7 | CΔ | %
+Starlight : F#ø B7 | E- A7 | D- G7 | CΔ
+Starlight N&D variant : F#ø F- | E- Ebo | D- G7 | CΔ
+Regular : D- | G7 | CΔ | %
+Regular (minor) : Dø | G7+9 | CΔ | %
+Tension Ending : D- | G7 | C7 | %
+Tritone Substitution : D- | Db7 | CΔ | %
+Two-Goes (and More) : D- G7 | D- G7 | CΔ
+Yardbird : F- | Bb7 | CΔ | %
+
+Foggy : CΔ Eb7 | D- G7
+II ’n’ Back  : D- D#o | (E-)
+Ladybird : CΔ Eb7 | AbΔ Db7
+Nowhere : CΔ A7 | Ab7 G7
+Pennies : CΔ D- | E- Ebo | D- | G7
+POT (Plain Old Turnaround) : CΔ A7 | D- G7
+POT (minor) : CmΔ Aø | Dø G7+9
+Rhythm : CΔ Dbo | D- Ebo
+SPOT (Suspended POT) : E- A7 | D- G7
+To IV 'n' Back : CΔ C7 | FΔ F#o | CΔ
+To IV 'n' Hack : CΔ C7 | FΔ B7 | CΔ
+To IV 'n' Mack : CΔ C7 | FΔ FmΔ | CΔ
+To IV 'n' Yak : CΔ C7 | FΔ Bb7 | CΔ
+Whoopee : CΔ C#o | D- G7
+
+Autumn Leaves Opening : D- | G7 | CΔ | FΔ | Bø | E7 | AmΔ | (A7)
+Four-Star Ending : FΔ | F#- B7 | E- | A7 | D- | G7 | CΔ | %
+Honeysuckle Bridge : (G-) | C7 | FΔ | % | (A-) | D7 | (D-) | G7
+ITCHY Opening : CΔ | E- A7 | D- | F#- B7
+On-Off-On + Dropback : CΔ | (Any dom)7 | CΔ | A7
+Pennies Ending : FΔ | F#o | CΔ | (E-) A7 | D- | G7 | CΔ | %
+Rhythm Bridge : (B-) | E7 | (E-) | A7 | (A-) | D7 | (D-) | G7
+Sharp Fourpenny Ending : F#ø | F- Bb7 | CΔ | (E-) A7 | D- | G7 | CΔ | %
+Sixpenny Ending : A- | F- Bb7 | CΔ | (E-) A7 | D- | G7 | CΔ | %
+To IV ’n’ Bird SPOT : CΔ C7 | FΔ Bb7 | E- A7 | D- G7
+Twopenny Ending  : D- | F- Bb7 | CΔ | (E-) A7 | D- | G7 | CΔ | %
+
+Chromatic Dropback  : CΔ B7 | Bb7 A7 | (D-)
+Dogleg : D- G7 | G- C7 | C- etc
+Dropback : CΔ | A7 | (D-)
+Raindrop : E- | Ebo | (D-)
+Starlight Dropback : F#- B7 | E- A7 | (D-)
+TINGLe Dropback : CΔ F7 | Bb7 A7 | (D-)
+TTFA Dropback  : CΔ F7 | E- A7 | (D-)
+
+
+
+
+
