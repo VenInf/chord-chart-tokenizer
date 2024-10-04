@@ -29,7 +29,7 @@ newtype Songs
   deriving (Generic, Show, ToJSON, FromJSON)
 
 contentToChords :: String -> [Chord]
-contentToChords content = map (normalizeChord . rawToChord) cordsRawNoNC
+contentToChords content = map (normalizeChord . rawToChord . removeBase) cordsRawNoNC
   where
     unbared = filter (/= '|') content
     cordsRaw = splitOn " " $ unwords $ words unbared

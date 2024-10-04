@@ -1,25 +1,25 @@
-{-# LANGUAGE DeriveAnyClass  #-}
-{-# LANGUAGE DeriveGeneric   #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE DeriveAnyClass      #-}
+{-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE RecordWildCards     #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable  #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
+import           Chords
 import           Data.Aeson
 import           Data.List
 import           Data.List.Split
 import           GHC.Generics
-import           System.Directory
-import           System.FilePath
-import Chords
-import Songs
-import SplitByTokens
+import           Songs
+import           SongsReportCreator
+import           SplitByTokens
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
+import           System.Directory
 import           System.Exit
-import SongsReportCreator
+import           System.FilePath
 
 songsJSONDir :: FilePath
 songsJSONDir = "./data/out-songs/"
@@ -31,10 +31,10 @@ reportsDir :: FilePath
 reportsDir = "./data/reports/"
 
 data TokenizerArgs = TokenizerArgs
-                   { in_json_file    :: FilePath
-                   , tokens_file     :: FilePath
-                   , report_file     :: FilePath
-                   , out_json_file   :: FilePath
+                   { in_json_file  :: FilePath
+                   , tokens_file   :: FilePath
+                   , report_file   :: FilePath
+                   , out_json_file :: FilePath
                    }
                      deriving (Show, Read, Data, Typeable)
 

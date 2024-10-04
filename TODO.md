@@ -28,6 +28,15 @@
 - [x] Get blocks from websites
 - [] Rewrite readme
 
+- [] Tests!
+    - [] Is chords reading is adequate
+    - [] Songs before tokenization and after are equivalent
+
+    - [] For raw-songs-handler
+    - [] For token-creator
+    - [] For songs-tokenizer
+
+
 - [x] Tokenizer State
 - [x] Save state to a file
 - [x] Retrive state from a file

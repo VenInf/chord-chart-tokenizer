@@ -2,14 +2,11 @@ module SongsReportCreator where
 
 
 import           Colonnade
-import           Data.List              (nub, sortBy,
-                                         zipWith4, group, sort)
+import           Data.List              (group, sort, zipWith4)
+import           Data.List.Extra        (sortOn)
 import qualified Data.Maybe             as MB
-import           Data.Tuple
-import           Data.Tuple.Extra       (uncurry3)
 import           Songs
 import           Text.PrettyPrint.Boxes
-import Data.List.Extra (sortOn)
 
 
 

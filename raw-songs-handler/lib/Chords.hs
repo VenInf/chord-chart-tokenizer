@@ -36,6 +36,9 @@ readDiff diff = go diffNoParenthesis
         go ('+':numb) = read numb
         go numb = read numb
 
+showChord :: Chord -> String
+showChord (Chord {..}) = note <> septima
+
 applyDiffToNote :: String -> Int -> String
 applyDiffToNote note diff = notesOrder !! newIndex
     where
@@ -43,6 +46,13 @@ applyDiffToNote note diff = notesOrder !! newIndex
                         Nothing -> error $ show note ++ " is not a valid note"
                         Just indx -> indx
         newIndex = (noteIndex + diff) `mod` length notesOrder
+
+
+
+removeBase :: String -> String
+removeBase rawChord = if '/' `elem` rawChord
+                      then head $ splitOn "/" rawChord -- drop everyting after altered base
+                      else rawChord
 
 
 {-- Conversion Rules:
@@ -60,7 +70,7 @@ rawToChord chordRaw =
     (note:sept) -> Chord [note] sept
 
 normalizeChord :: Chord -> Chord
-normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial noAltBaseSept)
+normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial septima)
   where
     normNote = case note of
               "Fb" -> "E"
@@ -75,10 +85,6 @@ normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial noAltBaseSept)
               "B#" -> "C"
 
               n -> n
-
-    noAltBaseSept = if '/' `elem` septima
-               then head $ splitOn "/" septima -- drop everyting after altered base
-               else septima
 
 
 -- | Reads all possible septimas to
