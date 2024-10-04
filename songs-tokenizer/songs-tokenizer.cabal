@@ -14,11 +14,12 @@ library
     import:           warnings
     exposed-modules:
         SplitByTokens
-        ReportCreator
+        SongsReportCreator
     build-depends:
           base >=4.7 && <5
         , raw-songs-handler
         , aeson
+        , boxes
         , colonnade
         , containers
         , safe

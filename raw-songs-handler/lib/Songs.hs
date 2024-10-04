@@ -21,6 +21,7 @@ data Song = Song {
     , chords     :: [Chord]
     , diffView   :: String
     , tokenView  :: Maybe [String]
+    , blockView  :: Maybe [String]
     } deriving (Generic, Show, ToJSON, FromJSON)
 
 newtype Songs
@@ -28,7 +29,7 @@ newtype Songs
   deriving (Generic, Show, ToJSON, FromJSON)
 
 contentToChords :: String -> [Chord]
-contentToChords content = filterRepeatingChords $ map (normalizeChord . rawToChord) cordsRawNoNC
+contentToChords content = map (normalizeChord . rawToChord) cordsRawNoNC
   where
     unbared = filter (/= '|') content
     cordsRaw = splitOn " " $ unwords $ words unbared
@@ -78,6 +79,7 @@ contentToSong input = go $ lines input
         chords =  contentToChords content
         diffView = unwords $ chordsToDiff chords
         tokenView = Nothing
+        blockView = Nothing
     go _ = error "unexpected number of lines"
 
 

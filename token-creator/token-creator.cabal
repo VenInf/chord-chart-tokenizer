@@ -13,7 +13,7 @@ library
     import:           warnings
     exposed-modules:
         TokenCreator
-        ReportCreator
+        TokenReportCreator
         TokenToBlock
     build-depends:
           base >=4.7 && <5
@@ -33,6 +33,7 @@ executable token-creator
     main-is:          Main.hs
     build-depends:
           base >=4.7 && <5
+        , raw-songs-handler
         , token-creator
         , cmdargs
         , split

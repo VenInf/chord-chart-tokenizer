@@ -8,9 +8,11 @@ import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
 import           TokenCreator
-import           ReportCreator
+import           TokenReportCreator
 import           Data.List.Split
-import Data.List (intercalate)
+import Data.List (intercalate, nub)
+import Songs (contentToChords, chordsToDiff)
+import TokenToBlock (tokenToBlock)
 
 
 
@@ -89,6 +91,18 @@ main = do
     else do
         putStrLn $ "Token out file at " <> (tokensDir <> tokens_file args)
         writeFile (tokensDir <> tokens_file args) (unlines tokens)
+
+
+    let diffs = map (chordsToDiff . contentToChords . snd) namedBlocks
+        tokenDictionary = nub $ concat diffs
+
+    putStrLn "Dictionary:"
+    print tokenDictionary
+
+    putStrLn "Known blocks:"
+    let blocksInDiffs = map (\(name, blk) -> (name, unwords $ chordsToDiff $ contentToChords blk)) namedBlocks
+
+    print blocksInDiffs
 
     putStrLn "Done"
 

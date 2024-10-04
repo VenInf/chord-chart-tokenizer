@@ -1,64 +1,77 @@
 Amen : FM7 | CM7
-Autumnal : Dm7 (G7) | Bm7b5 E7 | AmM7 AmM7
+Autumnal : Dm7 G7 | Bm7b5 E7 | AmM7 AmM7
 Body & Soul : Dm7 A7 | Dm7 G7 | CM7 | CM7
-Dizzy : Abm7 | D7b7 | CM7 | CM7
+Dizzy : Abm7 | Db7 | CM7 | CM7
 Dogleg : Am7 D7 | Dm7 G7 | CM7 | CM7
 (7-chord) Dropback : Dm7 G7 | CM7 A7 | Dm7 G7 | CM7
 Extended : Am7 | Dm7 | G7 | CM7
 Happenstance : Gbm7 | B7 | CM7 | CM7
 Long : Em7 A7 | Dm7 G7 | CM7 | CM7
 Overrun : Dm7 | G7 | CM7 | FM7
-Moment’s : Dbm7 G7b7 | Dm7 G7 | CM7 | CM7
+Moment’s : Dbm7 Gb7 | Dm7 G7 | CM7 | CM7
 Night & Day : AbM7 | G7 | CM7 | CM7
 Nobody’s : CM7 | E7 | AmM7 | AmM7
-Nowhere : A7b7 | G7 | CM7 | CM7
+Nowhere : Ab7 | G7 | CM7 | CM7
 (7-chord) Pullback : Dm7 G7 | Em7 A7 | Dm7 G7 | CM7
 Rainbow (variant) : CM7 | E7 | FM7 | FM7
-Rainy : Em7 Em7b7b5 | Dm7 G7 | CM7 | CM7
-Satin : Am7 D7 | Abm7 D7b7 | CM7 | CM7
+Rainy : Em7 Emb7b5 | Dm7 G7 | CM7 | CM7
+Satin : Am7 D7 | Abm7 Db7 | CM7 | CM7
 Spring : Bm7b5 E7 | Dm7 G7 | CM7 | CM7
-Stablemates : Ebm7 A7b7 | Dm7 G7 | CM7 | CM7
+Stablemates : Ebm7 Ab7 | Dm7 G7 | CM7 | CM7
 Starlight : Gbm7b5 B7 | Em7 A7 | Dm7 G7 | CM7
-Starlight N&D variant : Gbm7b5 Fm7 | Em7 Em7b7b5 | Dm7 G7 | CM7
+Starlight N&D variant : Gbm7b5 Fm7 | Em7 Emb7b5 | Dm7 G7 | CM7
 Regular : Dm7 | G7 | CM7 | CM7
-Regular (minor) : Dm7b5 | G7+9 | CM7 | CM7
+Regular (minor) : Dm7b5 | G7 | CM7 | CM7
 Tension Ending : Dm7 | G7 | C7 | C7
-Tritone Substitution : Dm7 | D7b7 | CM7 | CM7
+Tritone Substitution : Dm7 | Db7 | CM7 | CM7
 Two-Goes (and More) : Dm7 G7 | Dm7 G7 | CM7
-Yardbird : Fm7 | B7b7 | CM7 | CM7
+Yardbird : Fm7 | Bb7 | CM7 | CM7
 
-Foggy : CM7 E7b7 | Dm7 G7
-II ’n’ Back  : Dm7 Em7b7b5 | (Em7)
-Ladybird : CM7 E7b7 | AbM7 D7b7
-Nowhere : CM7 A7 | A7b7 G7
-Pennies : CM7 Dm7 | Em7 Em7b7b5 | Dm7 | G7
+Foggy : CM7 Eb7 | Dm7 G7
+II ’n’ Back : Dm7 Emb7b5 | Em7
+Ladybird : CM7 Eb7 | AbM7 Db7
+Nowhere : CM7 A7 | Ab7 G7
+Pennies : CM7 Dm7 | Em7 Emb7b5 | Dm7 | G7
 POT (Plain Old Turnaround) : CM7 A7 | Dm7 G7
-POT (minor) : CmM7 Am7b5 | Dm7b5 G7+9
-Rhythm : CM7 Dm7b7b5 | Dm7 Em7b7b5
+POT (minor) : CmM7 Am7b5 | Dm7b5 G7
+Rhythm : CM7 Dmb7b5 | Dm7 Emb7b5
 SPOT (Suspended POT) : Em7 A7 | Dm7 G7
-To IV 'n' Back : CM7 C7 | FM7 Gm7b7b5 | CM7
+To IV 'n' Back : CM7 C7 | FM7 Gmb7b5 | CM7
 To IV 'n' Hack : CM7 C7 | FM7 B7 | CM7
 To IV 'n' Mack : CM7 C7 | FM7 FmM7 | CM7
-To IV 'n' Yak : CM7 C7 | FM7 B7b7 | CM7
-Whoopee : CM7 Dm7b7b5 | Dm7 G7
+To IV 'n' Yak : CM7 C7 | FM7 Bb7 | CM7
+Whoopee : CM7 Dmb7b5 | Dm7 G7
 
-Autumn Leaves Opening : Dm7 | G7 | CM7 | FM7 | Bm7b5 | E7 | AmM7 | (A7)
+Autumn Leaves Opening : Dm7 | G7 | CM7 | FM7 | Bm7b5 | E7 | AmM7 | A7
 Four-Star Ending : FM7 | Gbm7 B7 | Em7 | A7 | Dm7 | G7 | CM7 | CM7
-Honeysuckle Bridge : (G-) | C7 | FM7 | FM7 | (Am7) | D7 | (Dm7) | G7
+Honeysuckle Bridge : Gm7 | C7 | FM7 | FM7 | Am7 | D7 | Dm7 | G7
 ITCHY Opening : CM7 | Em7 A7 | Dm7 | Gbm7 B7
-On-Off-On + Dropback : CM7 | (Any dom)7 | CM7 | A7
-Pennies Ending : FM7 | Gm7b7b5 | CM7 | (Em7) A7 | Dm7 | G7 | CM7 | CM7
-Rhythm Bridge : (B-) | E7 | (Em7) | A7 | (Am7) | D7 | (Dm7) | G7
-Sharp Fourpenny Ending : Gbm7b5 | Fm7 B7b7 | CM7 | (Em7) A7 | Dm7 | G7 | CM7 | CM7
-Sixpenny Ending : Am7 | Fm7 B7b7 | CM7 | (Em7) A7 | Dm7 | G7 | CM7 | CM7
-To IV ’n’ Bird SPOT : CM7 C7 | FM7 B7b7 | Em7 A7 | Dm7 G7
-Twopenny Ending  : Dm7 | Fm7 B7b7 | CM7 | (Em7) A7 | Dm7 | G7 | CM7 | CM7
 
-Chromatic Dropback  : CM7 B7 | B7b7 A7 | (Dm7)
-Dogleg : Dm7 G7 | Gm7 C7 | Cm7 etc
-Dropback : CM7 | A7 | (Dm7)
-Raindrop : Em7 | Em7b7b5 | (Dm7)
-Starlight Dropback : Gbm7 B7 | Em7 A7 | (Dm7)
-TINGLe Dropback : CM7 F7 | B7b7 A7 | (Dm7)
-TTFA Dropback  : CM7 F7 | Em7 A7 | (Dm7)
+On-Off-On + Dropback with C : CM7 | C7 | CM7 | A7
+On-Off-On + Dropback with Db : CM7 | Db7 | CM7 | A7
+On-Off-On + Dropback with D : CM7 | D7 | CM7 | A7
+On-Off-On + Dropback with Eb : CM7 | Eb7 | CM7 | A7
+On-Off-On + Dropback with E : CM7 | E7 | CM7 | A7
+On-Off-On + Dropback with F : CM7 | F7 | CM7 | A7
+On-Off-On + Dropback with Gb : CM7 | Gb7 | CM7 | A7
+On-Off-On + Dropback with G : CM7 | G7 | CM7 | A7
+On-Off-On + Dropback with Ab : CM7 | Ab7 | CM7 | A7
+On-Off-On + Dropback with A : CM7 | A7 | CM7 | A7
+On-Off-On + Dropback with Bb : CM7 | Bb7 | CM7 | A7
+On-Off-On + Dropback with B : CM7 | B7 | CM7 | A7
+
+Pennies Ending : FM7 | Gmb7b5 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
+Rhythm Bridge : Bm7 | E7 | Em7 | A7 | Am7 | D7 | Dm7 | G7
+Sharp Fourpenny Ending : Gbm7b5 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
+Sixpenny Ending : Am7 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
+To IV ’n’ Bird SPOT : CM7 C7 | FM7 Bb7 | Em7 A7 | Dm7 G7
+Twopenny Ending  : Dm7 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
+
+Chromatic Dropback  : CM7 B7 | Bb7 A7 | Dm7
+Dogleg : Dm7 G7 | Gm7 C7 | Cm7
+Dropback : CM7 | A7 | Dm7
+Raindrop : Em7 | Emb7b5 | Dm7
+Starlight Dropback : Gbm7 B7 | Em7 A7 | Dm7
+TINGLe Dropback : CM7 F7 | Bb7 A7 | Dm7
+TTFA Dropback  : CM7 F7 | Em7 A7 | Dm7
 

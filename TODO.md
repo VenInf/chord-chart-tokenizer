@@ -18,13 +18,14 @@
     - [x] Place by addition, amount of tokens, probability of a token, token itself and a block representation
     - [x] Precent covered by meaningful tokens
     - [x] Entropy by Shannon
-    - [] Is token an existing token? A token from a website?
-    - [] What is the total number of found tokens
-    - [] The longest, the most popular n tokens
+    - [x] The longest, the most popular n tokens
+    - [x] Is token an existing token?
+    - [] A token from a website?
+    - [x] What is the total number of found tokens
 - [] Stats after tokenization ?
 
 - [] Get blocks from literature
-- [] Get blocks from websites
+- [x] Get blocks from websites
 - [] Rewrite readme
 
 - [x] Tokenizer State

@@ -1,0 +1,71 @@
+Amen : M7 (-5) M7
+Autumnal : m7 (+5) 7 (+4) m7b5 (+5) 7 (+5) mM7 (0) mM7
+Body & Soul : m7 (-5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+Dizzy : m7 (+5) 7 (-1) M7 (0) M7
+Dogleg : m7 (+5) 7 (0) m7 (+5) 7 (+5) M7 (0) M7
+(7-chord) Dropback : m7 (+5) 7 (+5) M7 (-3) 7 (+5) m7 (+5) 7 (+5) M7
+Extended : m7 (+5) m7 (+5) 7 (+5) M7
+Happenstance : m7 (+5) 7 (+1) M7 (0) M7
+Long : m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+Overrun : m7 (+5) 7 (+5) M7 (+5) M7
+Moment\8217s : m7 (+5) 7 (-4) m7 (+5) 7 (+5) M7 (0) M7
+Night & Day : M7 (-1) 7 (+5) M7 (0) M7
+Nobody\8217s : M7 (+4) 7 (+5) mM7 (0) mM7
+Nowhere : 7 (-1) 7 (+5) M7 (0) M7
+(7-chord) Pullback : m7 (+5) 7 (-3) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7
+Rainbow (variant) : M7 (+4) 7 (+1) M7 (0) M7
+Rainy : m7 (0) mb7b5 (-2) m7 (+5) 7 (+5) M7 (0) M7
+Satin : m7 (+5) 7 (+6) m7 (+5) 7 (-1) M7 (0) M7
+Spring : m7b5 (+5) 7 (-2) m7 (+5) 7 (+5) M7 (0) M7
+Stablemates : m7 (+5) 7 (+6) m7 (+5) 7 (+5) M7 (0) M7
+Starlight : m7b5 (+5) 7 (+5) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7
+Starlight N&D variant : m7b5 (-1) m7 (-1) m7 (0) mb7b5 (-2) m7 (+5) 7 (+5) M7
+Regular : m7 (+5) 7 (+5) M7 (0) M7
+Regular (minor) : m7b5 (+5) 7 (+5) M7 (0) M7
+Tension Ending : m7 (+5) 7 (+5) 7 (0) 7
+Tritone Substitution : m7 (-1) 7 (-1) M7 (0) M7
+Two-Goes (and More) : m7 (+5) 7 (-5) m7 (+5) 7 (+5) M7
+Yardbird : m7 (+5) 7 (+2) M7 (0) M7
+Foggy : M7 (+3) 7 (-1) m7 (+5) 7
+II \8217n\8217 Back : m7 (+2) mb7b5 (0) m7
+Ladybird : M7 (+3) 7 (+5) M7 (+5) 7
+Nowhere : M7 (-3) 7 (-1) 7 (-1) 7
+Pennies : M7 (+2) m7 (+2) m7 (0) mb7b5 (-2) m7 (+5) 7
+POT (Plain Old Turnaround) : M7 (-3) 7 (+5) m7 (+5) 7
+POT (minor) : mM7 (-3) m7b5 (+5) m7b5 (+5) 7
+Rhythm : M7 (+2) mb7b5 (0) m7 (+2) mb7b5
+SPOT (Suspended POT) : m7 (+5) 7 (+5) m7 (+5) 7
+To IV 'n' Back : M7 (0) 7 (+5) M7 (+2) mb7b5 (+5) M7
+To IV 'n' Hack : M7 (0) 7 (+5) M7 (+6) 7 (+1) M7
+To IV 'n' Mack : M7 (0) 7 (+5) M7 (0) mM7 (-5) M7
+To IV 'n' Yak : M7 (0) 7 (+5) M7 (+5) 7 (+2) M7
+Whoopee : M7 (+2) mb7b5 (0) m7 (+5) 7
+Autumn Leaves Opening : m7 (+5) 7 (+5) M7 (+5) M7 (+6) m7b5 (+5) 7 (+5) mM7 (0) 7
+Four-Star Ending : M7 (+1) m7 (+5) 7 (+5) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+Honeysuckle Bridge : m7 (+5) 7 (+5) M7 (0) M7 (+4) m7 (+5) 7 (0) m7 (+5) 7
+ITCHY Opening : M7 (+4) m7 (+5) 7 (+5) m7 (+4) m7 (+5) 7
+On-Off-On + Dropback with C : M7 (0) 7 (0) M7 (-3) 7
+On-Off-On + Dropback with Db : M7 (+1) 7 (-1) M7 (-3) 7
+On-Off-On + Dropback with D : M7 (+2) 7 (-2) M7 (-3) 7
+On-Off-On + Dropback with Eb : M7 (+3) 7 (-3) M7 (-3) 7
+On-Off-On + Dropback with E : M7 (+4) 7 (-4) M7 (-3) 7
+On-Off-On + Dropback with F : M7 (+5) 7 (-5) M7 (-3) 7
+On-Off-On + Dropback with Gb : M7 (+6) 7 (+6) M7 (-3) 7
+On-Off-On + Dropback with G : M7 (-5) 7 (+5) M7 (-3) 7
+On-Off-On + Dropback with Ab : M7 (-4) 7 (+4) M7 (-3) 7
+On-Off-On + Dropback with A : M7 (-3) 7 (+3) M7 (-3) 7
+On-Off-On + Dropback with Bb : M7 (-2) 7 (+2) M7 (-3) 7
+On-Off-On + Dropback with B : M7 (-1) 7 (+1) M7 (-3) 7
+Pennies Ending : M7 (+2) mb7b5 (+5) M7 (+4) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+Rhythm Bridge : m7 (+5) 7 (0) m7 (+5) 7 (0) m7 (+5) 7 (0) m7 (+5) 7
+Sharp Fourpenny Ending : m7b5 (-1) m7 (+5) 7 (+2) M7 (+4) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+Sixpenny Ending : m7 (-4) m7 (+5) 7 (+2) M7 (+4) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+To IV \8217n\8217 Bird SPOT : M7 (0) 7 (+5) M7 (+5) 7 (+6) m7 (+5) 7 (+5) m7 (+5) 7
+Twopenny Ending  : m7 (+3) m7 (+5) 7 (+2) M7 (+4) m7 (+5) 7 (+5) m7 (+5) 7 (+5) M7 (0) M7
+Chromatic Dropback  : M7 (-1) 7 (-1) 7 (-1) 7 (+5) m7
+Dogleg : m7 (+5) 7 (0) m7 (+5) 7 (0) m7
+Dropback : M7 (-3) 7 (+5) m7
+Raindrop : m7 (0) mb7b5 (-2) m7
+Starlight Dropback : m7 (+5) 7 (+5) m7 (+5) 7 (+5) m7
+TINGLe Dropback : M7 (+5) 7 (+5) 7 (-1) 7 (+5) m7
+TTFA Dropback  : M7 (+5) 7 (-1) m7 (+5) 7 (+5) m7

@@ -13,6 +13,8 @@ import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
 import           Data.Aeson
 import System.Directory
 import System.FilePath
+import Data.List.Extra
+import Chords (Chord(..))
 
 rawSongsDir :: FilePath
 rawSongsDir = "./data/raw-songs/"

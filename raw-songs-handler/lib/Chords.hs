@@ -44,6 +44,10 @@ applyDiffToNote note diff = notesOrder !! newIndex
                         Just indx -> indx
         newIndex = (noteIndex + diff) `mod` length notesOrder
 
+
+{-- Conversion Rules:
+Leave only m7, 7 и M7
+--}
 rawToChord :: String -> Chord
 rawToChord chordRaw =
   case chordRaw of
@@ -56,7 +60,7 @@ rawToChord chordRaw =
     (note:sept) -> Chord [note] sept
 
 normalizeChord :: Chord -> Chord
-normalizeChord (Chord {..}) = Chord normNote (trivializeSept noAltBaseSept)
+normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial noAltBaseSept)
   where
     normNote = case note of
               "Fb" -> "E"
@@ -76,10 +80,37 @@ normalizeChord (Chord {..}) = Chord normNote (trivializeSept noAltBaseSept)
                then head $ splitOn "/" septima -- drop everyting after altered base
                else septima
 
-    trivializeSept spt
-      | "6" `isPrefixOf` spt  = "M7"
-      | "M" `isPrefixOf` spt  = "M7"
-      | "m" `isPrefixOf` spt  = "m7"
-      | "o7" `isPrefixOf` spt = "m7"
-      | otherwise             = "7"
 
+-- | Reads all possible septimas to
+--   M7, m7 or 7
+readSeptTrivial :: String -> String
+readSeptTrivial spt
+  | "6" `isPrefixOf` spt  = "M7"
+  | "M" `isPrefixOf` spt  = "M7"
+  | "m" `isPrefixOf` spt  = "m7"
+  | "o7" `isPrefixOf` spt = "m7"
+  | otherwise             = "7"
+
+
+-- | Reads all possible septimas to
+--   M7, m7, 7, m7b5 or mb7b5
+--
+-- Used notation vs other common variants
+-- mb7b5  | o
+-- m7b5   | ø
+-- mM7    | mΔ
+-- M7     | Δ
+-- m7     | m7
+-- 7      | 7
+--
+readSeptLessTrivial :: String -> String
+readSeptLessTrivial spt
+  | "mb7b5" `isInfixOf` spt                               = "mb7b5"
+  | "dim" `isInfixOf` spt                                 = "mb7b5"
+  | "o" `isPrefixOf` spt && not ("M7" `isInfixOf` spt)    = "mb7b5"
+  | "7b5" `isInfixOf` spt && not ("M7b5" `isInfixOf` spt) = "m7b5"
+  | "mM" `isInfixOf` spt                                  = "mM7"
+  | "Maj" `isInfixOf` spt || "maj" `isInfixOf` spt        = "M7"
+  | "M" `isInfixOf` spt                                   = "M7"
+  | "m" `isInfixOf` spt                                   = "m7"
+  | otherwise                                             = "7"

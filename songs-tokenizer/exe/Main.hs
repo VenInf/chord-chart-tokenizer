@@ -19,7 +19,7 @@ import SplitByTokens
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
-import ReportCreator
+import SongsReportCreator
 
 songsJSONDir :: FilePath
 songsJSONDir = "./data/out-songs/"
@@ -48,10 +48,11 @@ defaultArgs = TokenizerArgs
               }
 
 addTokenView :: Song -> [String] -> [String] -> Song
-addTokenView song@(Song{content=content}) tokensDictionary tokens = song{tokenView = Just tokenView}
+addTokenView song@(Song{content=content}) tokensDictionary tokens = song{tokenView = Just tokenView, blockView = Just blockView}
     where
         wordedSong = words content
-        tokenView = chordsByTokens wordedSong tokensDictionary tokens
+        blockView = chordsByTokens wordedSong tokensDictionary tokens
+        tokenView = map (unwords . chordsToDiff . contentToChords) blockView
 
 main :: IO()
 main = do
