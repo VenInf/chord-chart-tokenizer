@@ -1,6 +1,3 @@
-{-# LANGUAGE DeriveAnyClass      #-}
-{-# LANGUAGE DeriveGeneric       #-}
-{-# LANGUAGE RecordWildCards     #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# LANGUAGE DeriveDataTypeable  #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -48,11 +45,11 @@ defaultArgs = TokenizerArgs
               }
 
 addTokenView :: Song -> [String] -> [String] -> Song
-addTokenView song@(Song{content=content}) tokensDictionary tokens = song{tokenView = Just tokenView, blockView = Just blockView}
+addTokenView song@(Song{content=cnt}) tokensDictionary tokens = song{tokenView = Just tknView, blockView = Just blkView}
     where
-        wordedSong = words content
-        blockView = chordsByTokens wordedSong tokensDictionary tokens
-        tokenView = map (unwords . chordsToDiff . contentToChords) blockView
+        wordedSong = words cnt
+        blkView = chordsByTokens wordedSong tokensDictionary tokens
+        tknView = map (unwords . chordsToDiff . contentToChords) blkView
 
 main :: IO()
 main = do
@@ -82,7 +79,7 @@ main = do
 
 
     let tokens = lines rawTokens
-        tokensDictionary = nub $ concatMap (words . diffView) songs
+        tokensDictionary = sortOn ((* (-1)) . length) $ nub $ concatMap (words . diffView) songs
         updatedSongs = Songs $ map (\sng -> addTokenView sng tokensDictionary tokens) songs
         report = createReport updatedSongs
 

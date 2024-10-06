@@ -20,7 +20,7 @@ notesOrder :: [String]
 notesOrder = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
 
 septs :: [String]
-septs = ["M7", "m7", "7"]
+septs = ["mb7b5", "m7b5", "mM7", "M7", "m7", "7"]
 
 showDiff :: Int -> String
 showDiff n

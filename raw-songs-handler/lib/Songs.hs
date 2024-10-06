@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveAnyClass  #-}
+{-# LANGUAGE DeriveAnyClass   #-}
 {-# LANGUAGE DeriveGeneric   #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}

@@ -8,7 +8,7 @@ import           Data.List.Extra       (splitOn)
 
 
 ignoreWords :: [String]
-ignoreWords = ["|", " "]
+ignoreWords = ["|", " ", "NC"]
 
 splitByDictionary :: String -> [String] -> [String]
 splitByDictionary token (d:dict) = intercalate [d] restSplitted
@@ -35,10 +35,10 @@ splitByChords wordedSong chords = go [] wordedSong chords
         go :: [String] -> [String] -> [Chord] -> ([String], [String])
         go accum (w:wrdSong) (ch:chrds)
             | w `elem` ignoreWords = go (w:accum) wrdSong (ch:chrds)
-            | normalizeChord (rawToChord w) == ch = go (w:accum) wrdSong chrds
+            | normalizeChord (rawToChord $ removeBase w) == ch = go (w:accum) wrdSong chrds
             | otherwise = ([], wrdSong)
         go accum restSong [] = (reverse accum, restSong)
-        go _ [] _            = ([], wordedSong)
+        go accum [] _        = (reverse accum, [])
 
 
 splitByToken :: [String] -> [String] -> ([String], [String])
