@@ -48,6 +48,16 @@ applyDiffToNote note diff = notesOrder !! newIndex
         newIndex = (noteIndex + diff) `mod` length notesOrder
 
 
+switchThirdsInChord :: Chord -> Chord
+switchThirdsInChord (Chord {..}) = case septima of
+    "7"     -> Chord note "7"
+    "m7"    -> Chord note "m7b5"
+    "m7b5"  -> Chord note "m7"
+    "M7"    -> Chord note "mM7"
+    "mM7"   -> Chord note "M7"
+    "mb7b5" -> Chord note "mb7b5" -- unclear what the altered version should be
+    _ -> error $ "Unknown septima " ++ septima
+
 
 removeBase :: String -> String
 removeBase rawChord = if '/' `elem` rawChord

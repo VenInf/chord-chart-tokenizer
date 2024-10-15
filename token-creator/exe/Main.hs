@@ -92,17 +92,5 @@ main = do
         putStrLn $ "Token out file at " <> (tokensDir <> tokens_file args)
         writeFile (tokensDir <> tokens_file args) (unlines tokens)
 
-
-    let diffs = map (chordsToDiff . contentToChords . snd) namedBlocks
-        tokenDictionary = nub $ concat diffs
-
-    putStrLn "Dictionary:"
-    print tokenDictionary
-
-    putStrLn "Known blocks:"
-    let blocksInDiffs = map (\(name, blk) -> (name, unwords $ chordsToDiff $ contentToChords blk)) namedBlocks
-
-    print blocksInDiffs
-
     putStrLn "Done"
 

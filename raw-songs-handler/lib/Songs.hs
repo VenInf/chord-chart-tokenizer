@@ -42,10 +42,10 @@ contentToChords content = map (normalizeChord . rawToChord . removeBase) cordsRa
     filterRepeatingChords c = c
 
 chordsToDiff :: [Chord] -> [String]
-chordsToDiff chords = (concat . transpose) [septs, relativeNoNotes]
+chordsToDiff chords = (concat . transpose) [gatheredSepts, relativeNoNotes]
   where
     relativeNoNotes = map (uncurry chordDiff) (makePairs chords)
-    septs = map septima chords
+    gatheredSepts = map septima chords
 
     chordDiff :: Chord -> Chord -> String
     chordDiff ch1@(Chord {note=n1}) ch2@(Chord {note=n2}) = showDiff $ pitch2 - pitch1

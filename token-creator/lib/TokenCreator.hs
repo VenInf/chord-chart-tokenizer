@@ -64,7 +64,10 @@ humanReadebleRankings rankings (TokenCreatorState {decodeTable = decodeTable}) =
 
 
 adjustFrequenciesByHeuristic :: (Ord k, Num a) => Map.Map k a -> (k -> Bool) -> Map.Map k a
-adjustFrequenciesByHeuristic frequencies isGood = Map.mapWithKey (\key freq -> if isGood key then freq + adjustDiff else freq) frequencies
+adjustFrequenciesByHeuristic frequencies isGood = Map.mapWithKey (\key freq -> if isGood key
+                                                                               then freq + adjustDiff
+                                                                               else freq)
+                                                                               frequencies
     where
         adjustDiff = fromIntegral $ length frequencies
 

@@ -4,14 +4,15 @@
 - [x] Multi line BPE mode
 - [x] Fix for tone range to `[-5, 6]`
 - [x] Merge everyting to M, M7, 7
-- [] Test a merger with more sept chords
+- [x] Test a merger with more sept chords
 - [x] Test a merger with repeating chords
+- [] Leave no more than 2 consecutive chords
 
 - [x] Table analysis output
 - [x] Token to Blocks converter (assume that the first M7 is CM7)
 - [x] Priority for tokens that start and end with a sept accord
 - [x] Split song by tokens ???
-- [] Visualize song split
+- [] Visualize song split (use default pagenizer)
 
 - [x] Refactoring
 - [] Stats after creating tokens
@@ -22,15 +23,20 @@
     - [x] Is token an existing token?
     - [] A token from a website?
     - [x] What is the total number of found tokens
+    - [] Change found tokens to fuzzy find of tokens.
 - [] Stats after tokenization ?
+    - [x] Precent covered by meaningful tokens
+    - [x] Entropy by Shannon
+
 
 - [] Get blocks from literature
+- [] Get blocks with minor and stress alterations.
 - [x] Get blocks from websites
 - [] Rewrite readme
 
 - [] Tests!
-    - [] Is chords reading is adequate
-    - [] Songs before tokenization and after are equivalent
+    - [x] Is chords reading is adequate
+    - [x] Songs before tokenization and after are equivalent
 
     - [] For raw-songs-handler
     - [] For token-creator
