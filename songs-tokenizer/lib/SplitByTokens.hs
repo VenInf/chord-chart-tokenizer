@@ -5,6 +5,8 @@ import Safe (headMay)
 import Data.Maybe
 import           Data.List       (intercalate)
 import           Data.List.Extra       (splitOn)
+import Data.List (sortOn)
+import Data.List (nub)
 
 
 ignoreWords :: [String]
@@ -48,11 +50,14 @@ splitByToken wordedSong splitedToken = Data.Maybe.fromMaybe ([], wordedSong) mbS
         potentialSplits = map (splitByChords wordedSong) potentialChords
         mbSplit = headMay $ filter (not . null . fst) potentialSplits
 
+makeTokensDictionary :: [String] -> [String]
+makeTokensDictionary diffs = sortOn ((* (-1)) . length) $ nub $ concatMap words diffs
+
 chordsByTokens :: [String] -> [String] -> [String] -> [String]
-chordsByTokens wordedSong tokenDictionary tokens = case mbGreedySplit of
+chordsByTokens wordedSong tokensDictionary tokens = case mbGreedySplit of
                                    Nothing -> []
-                                   Just (tokenized, rest) -> unwords tokenized : chordsByTokens rest tokenDictionary tokens
+                                   Just (tokenized, rest) -> unwords tokenized : chordsByTokens rest tokensDictionary tokens
     where
-        splitedTokens = map (`splitByDictionary` tokenDictionary) tokens
+        splitedTokens = map (`splitByDictionary` tokensDictionary) tokens
         splits = map (splitByToken wordedSong) splitedTokens
         mbGreedySplit = headMay $ filter (not . null . fst) splits

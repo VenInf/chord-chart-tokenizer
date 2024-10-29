@@ -6,7 +6,7 @@ import SplitByTokens (splitByDictionary)
 
 
 tokenToBlock :: [String] -> String -> String
-tokenToBlock tokenDictionary token = case mbRootNoteIndex of
+tokenToBlock tokensDictionary token = case mbRootNoteIndex of
                      Nothing -> token
                      Just (rootNote, index) -> do
                         let (prev, rootSept:next) = splitAt index splitToken
@@ -15,7 +15,7 @@ tokenToBlock tokenDictionary token = case mbRootNoteIndex of
                                             convertNextToBlock rootNote next
                         block
     where
-        splitToken = splitByDictionary token tokenDictionary
+        splitToken = splitByDictionary token tokensDictionary
 
         majorIndex = elemIndex "M7" splitToken
         minorIndex = elemIndex "m7" splitToken

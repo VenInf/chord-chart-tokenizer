@@ -48,8 +48,8 @@ applyDiffToNote note diff = notesOrder !! newIndex
         newIndex = (noteIndex + diff) `mod` length notesOrder
 
 
-switchThirdsInChord :: Chord -> Chord
-switchThirdsInChord (Chord {..}) = case septima of
+alterThirdsInChord :: Chord -> Chord
+alterThirdsInChord (Chord {..}) = case septima of
     "7"     -> Chord note "7"
     "m7"    -> Chord note "m7b5"
     "m7b5"  -> Chord note "m7"

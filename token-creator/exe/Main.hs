@@ -10,10 +10,12 @@ import           System.Exit
 import           TokenCreator
 import           TokenReportCreator
 import           Data.List.Split
-import Data.List (intercalate, nub)
+import Data.List (intercalate, nub, groupBy)
 import Songs (contentToChords, chordsToDiff)
 import TokenToBlock (tokenToBlock)
-
+import Chords
+import Data.Function (on)
+import Data.Foldable (minimumBy)
 
 
 songsInRelativeDir :: FilePath
@@ -58,7 +60,30 @@ getKnownBlocks = do
 
         namedBlocks = map splitToPair splited
         noSeparatorsBlocks = map (\(name, blk) ->(name, unwords $ words $ filter (/= '|') blk)) namedBlocks
-    pure noSeparatorsBlocks
+
+    pure $ concatMap allBlockAlterations noSeparatorsBlocks
+
+allBlockAlterations :: (String, String) -> [(String, String)]
+allBlockAlterations (blockName, block) = map (\(nm, cs) -> (nm, unwords $ map showChord cs)) $
+                                             filterDups $ giveAlterations (blockName, contentToChords block)
+    where
+        filterDups :: [(String, [Chord])] -> [(String, [Chord])]
+        filterDups namedBlocks = shortestNamedBlocks
+            where
+                shortestNamedBlocks = map (minimumBy (compare `on` (length . snd))) sameChordsGroups
+                sameChordsGroups = groupBy (\(_, c1) (_, c2) -> c1 == c2) namedBlocks
+
+        giveAlterations :: (String, [Chord]) -> [(String, [Chord])]
+        giveAlterations (name, chords) = map (\(pf, cs) -> (name ++ pf, cs)) $ giveAlterations' ("", chords) 0
+
+        giveAlterations' :: (String, [Chord]) -> Int -> [(String, [Chord])]
+        giveAlterations' (postf, c:chords) n = addPostfix ("", c) rest ++
+                                                addPostfix ('-':show n, alterThirdsInChord c) rest
+            where rest = giveAlterations' (postf, chords) (n + 1)
+        giveAlterations' (postf, []) _ = [(postf, [])]
+
+        addPostfix :: (String, Chord) -> [(String, [Chord])] -> [(String, [Chord])]
+        addPostfix (postf, chord) = map (\(pf, cs) -> (postf ++ pf, chord:cs))
 
 main :: IO()
 main = do

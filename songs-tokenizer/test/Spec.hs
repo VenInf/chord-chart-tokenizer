@@ -3,15 +3,15 @@
 
 import           Chords
 import           Data.Aeson
-import           Data.List              (nub, sort, sortOn)
+import           Data.List        (nub, sort, sortOn)
+import           Data.Maybe       (fromJust)
 import           Songs
+import           SplitByTokens
 import           System.Directory
 import           System.Exit
 import           System.FilePath
-import           Test.Tasty             (TestTree, defaultMain, testGroup)
-import           Test.Tasty.HUnit       (testCase, (@?=))
-import Data.Maybe (fromJust)
-import SplitByTokens
+import           Test.Tasty       (TestTree, defaultMain, testGroup)
+import           Test.Tasty.HUnit (testCase, (@?=))
 
 addTokenView :: Song -> [String] -> [String] -> Song
 addTokenView song@(Song{content=cnt}) tokensDictionary tokens = song{tokenView = Just tknView, blockView = Just blkView}
@@ -65,7 +65,7 @@ main = do
     rawTokens <- readFile (tokensDir <> "block-tokens.txt")
 
     let tokens = lines rawTokens
-        tokensDictionary = sortOn ((* (-1)) . length) $ nub $ concatMap (words . diffView) sngs
+        tokensDictionary = makeTokensDictionary $ map diffView sngs
         updatedSongs = Songs $ map (\sng -> addTokenView sng tokensDictionary tokens) sngs
 
     putStrLn $ "Using tokens: " <> rawTokens

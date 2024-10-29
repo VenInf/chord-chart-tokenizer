@@ -11,6 +11,7 @@ import           Text.PrettyPrint.Boxes
 import           TokenCreator (TokenCreatorState(..))
 import           TokenCreator
 import           TokenToBlock
+import SplitByTokens (makeTokensDictionary)
 
 
 data Ranks = Ranks { place       :: Int
@@ -31,16 +32,16 @@ makeRanks :: TokenCreatorState -> [(String, String)] -> [Ranks]
 makeRanks state namedBlocks = zipWith6 Ranks [1..] amounts probabilities tokens blocks fromattedKnownNames
     where
         normNamedBlocks = map (\(name, blk) -> (name,
-                             tokenToBlock tokenDictionary $ unwords $ chordsToDiff $ contentToChords blk)) namedBlocks
+                             tokenToBlock tokensDictionary $ unwords $ chordsToDiff $ contentToChords blk)) namedBlocks
 
         tokenAmounts = humanReadebleRankings (topTokens state) state
-        tokenDictionary = nub $ concatMap words (texts state)
+        tokensDictionary = makeTokensDictionary (texts state)
 
         amounts = map snd tokenAmounts
         totalAmount = toEnum $ sum amounts
         probabilities = map ((/ totalAmount) . toEnum) amounts
         tokens = map fst tokenAmounts
-        blocks = map (tokenToBlock tokenDictionary) tokens
+        blocks = map (tokenToBlock tokensDictionary) tokens
         knownNames = map (\blk -> lookup blk (map swap normNamedBlocks)) blocks
         fromattedKnownNames = map (MB.fromMaybe "") knownNames
 
@@ -49,10 +50,10 @@ makeLenStats :: TokenCreatorState -> [LenStats]
 makeLenStats state = map (uncurry3 LenStats) triples
     where
         tokenAmounts = humanReadebleRankings (topTokens state) state
-        tokenDictionary = nub $ concatMap words (texts state)
+        tokensDictionary = makeTokensDictionary (texts state)
 
         tokens = map fst tokenAmounts
-        blocks = map (tokenToBlock tokenDictionary) tokens
+        blocks = map (tokenToBlock tokensDictionary) tokens
         lengths = map (length . words) blocks
 
         triples = sortBy (flip (\(a,_, _) (b,_, _) -> compare a b)) (zip3 lengths tokens blocks)

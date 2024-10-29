@@ -79,7 +79,7 @@ main = do
 
 
     let tokens = lines rawTokens
-        tokensDictionary = sortOn ((* (-1)) . length) $ nub $ concatMap (words . diffView) songs
+        tokensDictionary = makeTokensDictionary $ map diffView songs
         updatedSongs = Songs $ map (\sng -> addTokenView sng tokensDictionary tokens) songs
         report = createReport updatedSongs
 

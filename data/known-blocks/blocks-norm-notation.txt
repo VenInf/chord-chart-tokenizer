@@ -1,3 +1,12 @@
+Hover : C7 | C7
+Hover : Cm7 | Cm7
+Hover : Cm7b5 | Cm7b5
+Hover : CM7 | CM7
+Hover : CmM7 | CmM7
+Hover : Cmb7b5 | Cmb7b5
+
+Original Cadence : Dm7 G7 | CM7
+
 Amen : FM7 | CM7
 Autumnal : Dm7 G7 | Bm7b5 E7 | AmM7 AmM7
 Body & Soul : Dm7 A7 | Dm7 G7 | CM7 | CM7
@@ -65,13 +74,13 @@ Rhythm Bridge : Bm7 | E7 | Em7 | A7 | Am7 | D7 | Dm7 | G7
 Sharp Fourpenny Ending : Gbm7b5 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
 Sixpenny Ending : Am7 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
 To IV ’n’ Bird SPOT : CM7 C7 | FM7 Bb7 | Em7 A7 | Dm7 G7
-Twopenny Ending  : Dm7 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
+Twopenny Ending : Dm7 | Fm7 Bb7 | CM7 | Em7 A7 | Dm7 | G7 | CM7 | CM7
 
-Chromatic Dropback  : CM7 B7 | Bb7 A7 | Dm7
+Chromatic Dropback : CM7 B7 | Bb7 A7 | Dm7
 Dogleg : Dm7 G7 | Gm7 C7 | Cm7
 Dropback : CM7 | A7 | Dm7
 Raindrop : Em7 | Emb7b5 | Dm7
 Starlight Dropback : Gbm7 B7 | Em7 A7 | Dm7
 TINGLe Dropback : CM7 F7 | Bb7 A7 | Dm7
-TTFA Dropback  : CM7 F7 | Em7 A7 | Dm7
+TTFA Dropback : CM7 F7 | Em7 A7 | Dm7
 
