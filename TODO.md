@@ -6,7 +6,7 @@
 - [x] Merge everyting to M, M7, 7
 - [x] Test a merger with more sept chords
 - [x] Test a merger with repeating chords
-- [] Leave no more than 2 consecutive chords
+- [x] Leave no more than 2 consecutive chords
 
 - [x] Table analysis output
 - [x] Token to Blocks converter (assume that the first M7 is CM7)
@@ -29,9 +29,10 @@
     - [x] Entropy by Shannon
 
 
-- [] Get blocks from literature
-- [] Get blocks with minor and stress alterations.
-- [x] Get blocks from websites
+- [x] Get blocks from literature
+- [x] Get blocks with minor alterations
+- [x] Get blocks with stress alterations
+- [] Get blocks from websites
 - [] Rewrite readme
 
 - [] Tests!

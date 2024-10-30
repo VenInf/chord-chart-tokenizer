@@ -29,17 +29,17 @@ newtype Songs
   deriving (Generic, Show, ToJSON, FromJSON)
 
 contentToChords :: String -> [Chord]
-contentToChords content = map (normalizeChord . rawToChord . removeBase) cordsRawNoNC
+contentToChords content = filterThreeRepeatingChords $ map (normalizeChord . rawToChord . removeBase) cordsRawNoNC
   where
     unbared = filter (/= '|') content
     cordsRaw = splitOn " " $ unwords $ words unbared
     cordsRawNoNC = filter (/= "NC") cordsRaw
 
-    filterRepeatingChords :: [Chord] -> [Chord]
-    filterRepeatingChords (c1:c2:chords)
-      | c1 == c2 = filterRepeatingChords (c2:chords)
-      | otherwise = c1: filterRepeatingChords (c2:chords)
-    filterRepeatingChords c = c
+    filterThreeRepeatingChords :: [Chord] -> [Chord]
+    filterThreeRepeatingChords (c1:c2:c3:chords)
+      | c1 == c2 && c2 == c3 = filterThreeRepeatingChords (c2:c3:chords)
+      | otherwise = c1 : filterThreeRepeatingChords (c2:c3:chords)
+    filterThreeRepeatingChords c = c
 
 chordsToDiff :: [Chord] -> [String]
 chordsToDiff chords = (concat . transpose) [gatheredSepts, relativeNoNotes]

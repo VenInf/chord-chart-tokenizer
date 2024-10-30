@@ -1,12 +1,10 @@
 module SplitByTokens where
 
-import Chords
-import Safe (headMay)
-import Data.Maybe
-import           Data.List       (intercalate)
-import           Data.List.Extra       (splitOn)
-import Data.List (sortOn)
-import Data.List (nub)
+import           Chords
+import           Data.List       (intercalate, nub, sortOn)
+import           Data.List.Extra (splitOn)
+import           Data.Maybe
+import           Safe            (headMay)
 
 
 ignoreWords :: [String]

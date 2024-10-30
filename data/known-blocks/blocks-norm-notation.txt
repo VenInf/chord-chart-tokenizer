@@ -1,8 +1,8 @@
 Hover : C7 | C7
 Hover : Cm7 | Cm7
-Hover : Cm7b5 | Cm7b5
 Hover : CM7 | CM7
 Hover : CmM7 | CmM7
+Hover : Cm7b5 | Cm7b5
 Hover : Cmb7b5 | Cmb7b5
 
 Original Cadence : Dm7 G7 | CM7

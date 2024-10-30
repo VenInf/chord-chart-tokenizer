@@ -4,18 +4,16 @@
 
 module Main (main) where
 
+import           Chords
+import           Data.List              (intercalate, sortBy, nubBy)
+import           Data.List.Split
+import           Songs                  (contentToChords)
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
 import           TokenCreator
 import           TokenReportCreator
-import           Data.List.Split
-import Data.List (intercalate, nub, groupBy)
-import Songs (contentToChords, chordsToDiff)
-import TokenToBlock (tokenToBlock)
-import Chords
-import Data.Function (on)
-import Data.Foldable (minimumBy)
+import Data.Ord
 
 
 songsInRelativeDir :: FilePath
@@ -32,10 +30,10 @@ knownBlocksDir = "./data/known-blocks/"
 
 
 data CreatorArgs = CreatorArgs
-                   { notation_file         :: FilePath
-                   , make_n_tokens         :: Int
-                   , report_file           :: FilePath
-                   , tokens_file           :: FilePath
+                   { notation_file :: FilePath
+                   , make_n_tokens :: Int
+                   , report_file   :: FilePath
+                   , tokens_file   :: FilePath
             }
             deriving (Show, Read, Data, Typeable)
 
@@ -60,19 +58,17 @@ getKnownBlocks = do
 
         namedBlocks = map splitToPair splited
         noSeparatorsBlocks = map (\(name, blk) ->(name, unwords $ words $ filter (/= '|') blk)) namedBlocks
+    pure $ filterDups $ concatMap allBlockAlterations noSeparatorsBlocks
 
-    pure $ concatMap allBlockAlterations noSeparatorsBlocks
+filterDups :: [(String, String)] -> [(String, String)]
+filterDups namedBlocks = nubBy (\(_, c1) (_, c2) -> c1 == c2) sorted
+    where
+        sorted = sortBy (comparing (\(n,c) -> (c, length n))) namedBlocks
 
 allBlockAlterations :: (String, String) -> [(String, String)]
-allBlockAlterations (blockName, block) = map (\(nm, cs) -> (nm, unwords $ map showChord cs)) $
-                                             filterDups $ giveAlterations (blockName, contentToChords block)
+allBlockAlterations (blkName, blk) = map (\(nm, cs) -> (nm, unwords $ map showChord cs)) $
+                                         giveAlterations (blkName, contentToChords blk)
     where
-        filterDups :: [(String, [Chord])] -> [(String, [Chord])]
-        filterDups namedBlocks = shortestNamedBlocks
-            where
-                shortestNamedBlocks = map (minimumBy (compare `on` (length . snd))) sameChordsGroups
-                sameChordsGroups = groupBy (\(_, c1) (_, c2) -> c1 == c2) namedBlocks
-
         giveAlterations :: (String, [Chord]) -> [(String, [Chord])]
         giveAlterations (name, chords) = map (\(pf, cs) -> (name ++ pf, cs)) $ giveAlterations' ("", chords) 0
 

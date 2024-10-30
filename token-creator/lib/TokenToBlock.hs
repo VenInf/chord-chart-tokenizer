@@ -1,8 +1,8 @@
 module TokenToBlock where
 
-import           Data.List       (elemIndex)
-import Chords (readDiff, applyDiffToNote)
-import SplitByTokens (splitByDictionary)
+import           Chords        (applyDiffToNote, readDiff)
+import           Data.List     (elemIndex)
+import           SplitByTokens (splitByDictionary)
 
 
 tokenToBlock :: [String] -> String -> String
@@ -21,15 +21,27 @@ tokenToBlock tokensDictionary token = case mbRootNoteIndex of
         minorIndex = elemIndex "m7" splitToken
         septIndex = elemIndex "7" splitToken
 
+        halfdimIndex = elemIndex "m7b5" splitToken
+        dimIndex = elemIndex "mb7b5" splitToken
+        minorMajorIndex = elemIndex "mM7" splitToken
+
         mbRootNoteIndex = case majorIndex of
                           Just index -> Just ("C", index)
                           Nothing ->
                             case minorIndex of
                             Just index -> Just ("D", index)
                             Nothing ->
-                                case septIndex of
-                                Just index -> Just ("G", index)
-                                Nothing -> Nothing
+                              case septIndex of
+                              Just index -> Just ("G", index)
+                              Nothing ->
+                                case halfdimIndex of
+                                Just index -> Just ("C", index)
+                                Nothing ->
+                                  case dimIndex of
+                                  Just index -> Just ("C", index)
+                                  Nothing -> case minorMajorIndex of
+                                    Just index -> Just ("C", index)
+                                    Nothing -> Nothing
 
 
 convertNextToBlock :: String -> [String] -> [String]

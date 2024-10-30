@@ -4,19 +4,13 @@
 
 module Main where
 
-import           Chords
 import           Data.Aeson
-import           Data.List
-import           Data.List.Split
-import           GHC.Generics
 import           Songs
 import           SongsReportCreator
 import           SplitByTokens
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
-import           System.Directory
 import           System.Exit
-import           System.FilePath
 
 songsJSONDir :: FilePath
 songsJSONDir = "./data/out-songs/"

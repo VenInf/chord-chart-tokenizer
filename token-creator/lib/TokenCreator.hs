@@ -4,14 +4,15 @@
 
 module TokenCreator where
 
-import           Data.Function   (on)
+import           Chords
+import           Data.Function   (on, (&))
 import           Data.Hashable   (hash)
-import           Data.List       (intercalate, sortBy, sortOn, nub)
+import           Data.List       (intercalate, isInfixOf, isPrefixOf,
+                                  isSuffixOf, nub, sortBy, sortOn)
 import           Data.List.Extra (splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
-import Data.List (isPrefixOf, isSuffixOf)
-import Chords
+import           SplitByTokens   (splitByDictionary)
 
 type TokenID = Int
 
@@ -49,7 +50,7 @@ tokenizerStateToTexts (TokenCreatorState {..}) = map (`decode` decodeTable) enco
 
 
 frequenciesOfElementsMap :: (Foldable t, Ord k, Num a) => t k -> Map.Map k a
-frequenciesOfElementsMap element = foldr (\elmnt counterMap -> Map.insertWith (+) elmnt 1 counterMap ) Map.empty element
+frequenciesOfElementsMap = foldr (\elmnt counterMap -> Map.insertWith (+) elmnt 1 counterMap) Map.empty
 
 tokenByValue :: String -> [(TokenID, String)] -> TokenID -- second value lookup
 tokenByValue value decodeTable = fst $ head $ filter (\(_, v) -> v == value) decodeTable
@@ -62,38 +63,76 @@ topTokens TokenCreatorState {encodedTexts = encodedTexts} = rankings
 humanReadebleRankings :: [(TokenID, Int)] -> TokenCreatorState -> [(String, Int)]
 humanReadebleRankings rankings (TokenCreatorState {decodeTable = decodeTable}) = map (\(rID,rs) -> (fromJust $ lookup rID decodeTable, rs)) rankings
 
-
-adjustFrequenciesByHeuristic :: (Ord k, Num a) => Map.Map k a -> (k -> Bool) -> Map.Map k a
-adjustFrequenciesByHeuristic frequencies isGood = Map.mapWithKey (\key freq -> if isGood key
+adjustFrequenciesByHeuristic :: (Ord k, Num a) => Map.Map k a -> (k -> Bool) -> a -> Map.Map k a
+adjustFrequenciesByHeuristic frequencies isGood adjustDiff = Map.mapWithKey (\key freq -> if isGood key
                                                                                then freq + adjustDiff
                                                                                else freq)
                                                                                frequencies
     where
-        adjustDiff = fromIntegral $ length frequencies
+        -- adjustDiff = fromIntegral $ floor $ strength * total
 
-mostFrequentTokenTriple :: TokenCreatorState -> (TokenID, TokenID, TokenID)
-mostFrequentTokenTriple (TokenCreatorState {encodedTexts = tokens, decodeTable = decodeTable}) = fst mostFrequent
+
+adjustFrequencies :: (Ord k, Num a) => Map.Map k a -> (k -> Float) -> Map.Map k a
+adjustFrequencies frequencies adjust = Map.mapWithKey (\key freq -> freq + adjustDiff (adjust key)) frequencies
+    where
+        adjustDiff strength = fromIntegral $ floor $ strength * fromIntegral (length frequencies)
+
+mostFrequentTokenTriple :: TokenCreatorState -> Maybe (TokenID, TokenID, TokenID)
+mostFrequentTokenTriple (TokenCreatorState { encodedTexts = tokens
+                                           , decodeTable = decodeTable
+                                           }) = if snd mostFrequent <= 0 then Nothing else Just $ fst mostFrequent
     where
         makeTriples (a:b:c:t) = (a, b, c) : makeTriples (b:c:t)
-        makeTriples _       = []
+        makeTriples _         = []
         triples = concatMap makeTriples tokens
 
         frequenciesMap = frequenciesOfElementsMap triples -- still slow, but better
-        adjustedFrequenciesMap = adjustFrequenciesByHeuristic frequenciesMap isTripleGood
+        totalFrequencies = length triples
+
+        getAdjustDiff :: Float -> Int
+        getAdjustDiff strength = floor $ strength * fromIntegral totalFrequencies
+
+        adjustedFrequenciesMap = ($ frequenciesMap) (\f -> adjustFrequenciesByHeuristic f hasSeptsBounds (getAdjustDiff 1))
+                                                --   & (\f -> adjustFrequenciesByHeuristic f (hasBlockLenN 3) 0.4)
+                                                --   & (\f -> adjustFrequenciesByHeuristic f (hasBlockLenN 4) 0.3)
+                                                  & (\f -> adjustFrequenciesByHeuristic f hasOnlyTerminalRepeats (getAdjustDiff 0.5))
+                                                --   & (\f -> adjustFrequencies f (\k -> 1 / fromIntegral (length $ givePotentialToken k)))
+
 
         maxBySnd p1@(_, v1) p2@(_, v2) = if v1 > v2 then p1 else p2
-        mostFrequent = Map.foldrWithKey (\k1 n1 (k2, n2) -> maxBySnd (k1, n1) (k2, n2)) ((0, 0, 0), 0) adjustedFrequenciesMap
+        mostFrequent = Map.foldrWithKey (\k1 n1 (k2, n2) -> maxBySnd (k1, n1) (k2, n2)) ((0, 0, 0), minBound :: Int) adjustedFrequenciesMap
 
-        isTripleGood :: (TokenID, TokenID, TokenID) -> Bool
-        isTripleGood (t1, t2, t3) = hasSeptPrefix && hasSeptSuffix
+        givePotentialToken :: (TokenID, TokenID, TokenID) -> String
+        givePotentialToken (t1, t2, t3) = concat [ fromJust $ lookup t1 decodeTable
+                                                 , fromJust $ lookup t2 decodeTable
+                                                 , fromJust $ lookup t3 decodeTable
+                                                 ]
+
+        hasSeptsBounds :: (TokenID, TokenID, TokenID) -> Bool
+        hasSeptsBounds (t1, t2, t3) = hasSeptPrefix && hasSeptSuffix
             where
-                potentialToken =  concat [ fromJust $ lookup t1 decodeTable
-                                         , fromJust $ lookup t2 decodeTable
-                                         , fromJust $ lookup t3 decodeTable
-                                         ]
+                potentialToken = givePotentialToken (t1, t2, t3)
 
                 hasSeptPrefix = any (`isPrefixOf` potentialToken) septs
                 hasSeptSuffix = any (`isSuffixOf` potentialToken) septs
+
+        hasRepeats :: (TokenID, TokenID, TokenID) -> Bool
+        hasRepeats (t1, t2, t3) = "(0)" `isInfixOf` potentialToken
+            where
+                potentialToken = givePotentialToken (t1, t2, t3)
+
+        hasOnlyTerminalRepeats :: (TokenID, TokenID, TokenID) -> Bool
+        hasOnlyTerminalRepeats (t1, t2, t3) = case reverse splittedByDiffs of
+                                          s1:"(0)":s2:_ -> s1 == s2 && length (filter (== "(0)") splittedByDiffs) == 1
+                                          _ -> False
+            where
+                splittedByDiffs = splitByDictionary potentialToken ["(" ++ show i ++ ")" | i <- [0..9]]
+                potentialToken = givePotentialToken (t1, t2, t3)
+
+        hasBlockLenN :: (TokenID, TokenID, TokenID) -> Int -> Bool
+        hasBlockLenN (t1, t2, t3) n = length potentialToken == n * 2 - 1
+            where
+                potentialToken = givePotentialToken (t1, t2, t3)
 
 
 addMergedToken :: (TokenID, TokenID, TokenID) -> TokenCreatorState -> TokenCreatorState
@@ -122,13 +161,15 @@ mergeTokenTriple tState@(TokenCreatorState {encodedTexts = encodedTexts, decodeT
 
         newState = tState {encodedTexts = map replaceTriples encodedTexts}
 
-makeOneToken :: TokenCreatorState -> TokenCreatorState
-makeOneToken tState = mergedTokenState
-    where tokenTriple = mostFrequentTokenTriple tState
-          addedTokenState = addMergedToken tokenTriple tState
-          mergedTokenState = mergeTokenTriple addedTokenState tokenTriple
+makeOneToken :: TokenCreatorState -> Maybe TokenCreatorState
+makeOneToken tState = mbMergedTokenState
+    where mbTokenTriple = mostFrequentTokenTriple tState
+          mbAddedTokenState = (`addMergedToken` tState) <$> mbTokenTriple
+          mbMergedTokenState = mergeTokenTriple <$> mbAddedTokenState <*> mbTokenTriple
 
 makeNTokens :: TokenCreatorState -> Int -> TokenCreatorState
 makeNTokens tState n
-    | n > 0 = makeNTokens (makeOneToken tState) (n-1)
+    | n > 0 = case makeOneToken tState of
+              Nothing       -> tState
+              Just newState -> makeNTokens newState (n-1)
     | otherwise = tState

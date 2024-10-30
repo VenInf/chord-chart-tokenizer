@@ -1,17 +1,15 @@
 module TokenReportCreator where
 
 import           Colonnade
-import           Data.List              (nub, sortBy,
-                                         zipWith6)
+import           Data.List              (sortBy, zipWith6)
 import qualified Data.Maybe             as MB
 import           Data.Tuple
 import           Data.Tuple.Extra       (uncurry3)
 import           Songs                  (chordsToDiff, contentToChords)
+import           SplitByTokens          (makeTokensDictionary)
 import           Text.PrettyPrint.Boxes
-import           TokenCreator (TokenCreatorState(..))
 import           TokenCreator
 import           TokenToBlock
-import SplitByTokens (makeTokensDictionary)
 
 
 data Ranks = Ranks { place       :: Int
