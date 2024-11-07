@@ -24,7 +24,7 @@ printColoredSong song = do
     putStrLn $ "Composer: " <> composedBy song
 
     let coloredBlocks = map (map (uncurry printStringColored)) (splitByNBars 5 blockColor)
-        withSpaces = map (mapM_ (\a -> a >> putStr " ")) coloredBlocks
+        withSpaces = map (mapM_ (\a -> a >> printStringColored " ^ " White)) coloredBlocks
     mapM_ (\a -> do a >> putStr "\n") withSpaces
     putStr "\n"
 
