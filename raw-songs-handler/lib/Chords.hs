@@ -65,9 +65,6 @@ removeBase rawChord = if '/' `elem` rawChord
                       else rawChord
 
 
-{-- Conversion Rules:
-Leave only m7, 7 и M7
---}
 rawToChord :: String -> Chord
 rawToChord chordRaw =
   case chordRaw of

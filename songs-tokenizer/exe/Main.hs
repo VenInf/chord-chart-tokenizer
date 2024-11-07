@@ -11,6 +11,7 @@ import           SplitByTokens
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
+import ColoredView (printColoredSongs)
 
 songsJSONDir :: FilePath
 songsJSONDir = "./data/out-songs/"
@@ -26,16 +27,19 @@ data TokenizerArgs = TokenizerArgs
                    , tokens_file   :: FilePath
                    , report_file   :: FilePath
                    , out_json_file :: FilePath
+                   , colored_view  :: Bool
                    }
                      deriving (Show, Read, Data, Typeable)
 
 defaultArgs :: TokenizerArgs
 defaultArgs = TokenizerArgs
               { in_json_file = def &= typFile &= help "A name for the input json file with songs"
-              , tokens_file = def &= help "A name for the input file with tokens"
+              , colored_view = def &= help "Output colored view of inputed songs, colors representing the tokens"
 
-              , report_file = def &= help "A name for the result file with a report"
-              , out_json_file = def &= typFile &= help "A name for the output json file with songs, incliding tokenized view"
+              , tokens_file = def &= help "A name for the input file with tokens"
+              , report_file = def &= help "Make a report with given name"
+              , out_json_file = def &= typFile &= help "Give songs tokenized view"
+
               }
 
 addTokenView :: Song -> [String] -> [String] -> Song
@@ -57,11 +61,18 @@ main = do
                                     putStrLn $ "Input JSON file with songs at " <> (songsJSONDir <> in_json_file args)
                                     decodeFileStrict (songsJSONDir <> in_json_file args)
 
-    songs <- case mbSongs of
+    sngs <- case mbSongs of
              Nothing -> do
                         putStrLn "Failed to parce JSON in provided file, abort."
                         exitFailure
              Just sngs -> pure (songs sngs)
+
+    if colored_view args == def
+    then putStrLn "No colored view specified, skip."
+    else do
+        putStrLn "The songs separated by blocks:"
+        printColoredSongs $ Songs sngs
+        exitSuccess
 
     rawTokens <- if tokens_file args == def
                  then do
@@ -71,10 +82,9 @@ main = do
                      putStrLn $ "Tokens input file at " <> (tokensDir <> tokens_file args)
                      readFile (tokensDir <> tokens_file args)
 
-
     let tokens = lines rawTokens
-        tokensDictionary = makeTokensDictionary $ map diffView songs
-        updatedSongs = Songs $ map (\sng -> addTokenView sng tokensDictionary tokens) songs
+        tokensDictionary = makeTokensDictionary $ map diffView sngs
+        updatedSongs = Songs $ map (\sng -> addTokenView sng tokensDictionary tokens) sngs
         report = createReport updatedSongs
 
 

@@ -5,6 +5,7 @@ import           Data.List       (intercalate, nub, sortOn)
 import           Data.List.Extra (splitOn)
 import           Data.Maybe
 import           Safe            (headMay)
+import Data.List.Split ( whenElt, split )
 
 
 ignoreWords :: [String]
@@ -15,6 +16,17 @@ splitByDictionary token (d:dict) = intercalate [d] restSplitted
     where
         restSplitted = map (`splitByDictionary` dict) $ splitOn d token
 splitByDictionary _ [] = []
+
+splitToken :: String -> [String]
+splitToken token = filter (/= "") $ go splitPars ""
+    where
+        splitPars = split (whenElt (`elem` "()")) token
+
+        go :: [String] -> String -> [String]
+        go ("(" : rest) accum = accum : go rest "("
+        go (")" : rest) accum = (accum ++ ")") : go rest []
+        go (s : rest) accum = go rest (accum ++ s)
+        go [] accum = [accum]
 
 fromRelativeGivenRoot :: String -> [String] -> [Chord]
 fromRelativeGivenRoot _ [] = []
@@ -30,7 +42,7 @@ fromRelativeGivenRoot rootNote (r:rest)
         startingWithDiff _ _ = []
 
 splitByChords :: [String] -> [Chord] -> ([String], [String])
-splitByChords wordedSong chords = go [] wordedSong chords
+splitByChords = go []
     where
         go :: [String] -> [String] -> [Chord] -> ([String], [String])
         go accum (w:wrdSong) (ch:chrds)

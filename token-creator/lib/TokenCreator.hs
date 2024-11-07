@@ -12,7 +12,7 @@ import           Data.List       (intercalate, isInfixOf, isPrefixOf,
 import           Data.List.Extra (splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
-import           SplitByTokens   (splitByDictionary)
+import SplitByTokens (splitToken)
 
 type TokenID = Int
 
@@ -68,14 +68,6 @@ adjustFrequenciesByHeuristic frequencies isGood adjustDiff = Map.mapWithKey (\ke
                                                                                then freq + adjustDiff
                                                                                else freq)
                                                                                frequencies
-    where
-        -- adjustDiff = fromIntegral $ floor $ strength * total
-
-
-adjustFrequencies :: (Ord k, Num a) => Map.Map k a -> (k -> Float) -> Map.Map k a
-adjustFrequencies frequencies adjust = Map.mapWithKey (\key freq -> freq + adjustDiff (adjust key)) frequencies
-    where
-        adjustDiff strength = fromIntegral $ floor $ strength * fromIntegral (length frequencies)
 
 mostFrequentTokenTriple :: TokenCreatorState -> Maybe (TokenID, TokenID, TokenID)
 mostFrequentTokenTriple (TokenCreatorState { encodedTexts = tokens
@@ -93,10 +85,9 @@ mostFrequentTokenTriple (TokenCreatorState { encodedTexts = tokens
         getAdjustDiff strength = floor $ strength * fromIntegral totalFrequencies
 
         adjustedFrequenciesMap = ($ frequenciesMap) (\f -> adjustFrequenciesByHeuristic f hasSeptsBounds (getAdjustDiff 1))
-                                                --   & (\f -> adjustFrequenciesByHeuristic f (hasBlockLenN 3) 0.4)
-                                                --   & (\f -> adjustFrequenciesByHeuristic f (hasBlockLenN 4) 0.3)
                                                   & (\f -> adjustFrequenciesByHeuristic f hasOnlyTerminalRepeats (getAdjustDiff 0.5))
-                                                --   & (\f -> adjustFrequencies f (\k -> 1 / fromIntegral (length $ givePotentialToken k)))
+                                                --   & (\f -> adjustFrequenciesByHeuristic f hasMajor (getAdjustDiff 0.05))
+
 
 
         maxBySnd p1@(_, v1) p2@(_, v2) = if v1 > v2 then p1 else p2
@@ -126,8 +117,14 @@ mostFrequentTokenTriple (TokenCreatorState { encodedTexts = tokens
                                           s1:"(0)":s2:_ -> s1 == s2 && length (filter (== "(0)") splittedByDiffs) == 1
                                           _ -> False
             where
-                splittedByDiffs = splitByDictionary potentialToken ["(" ++ show i ++ ")" | i <- [0..9]]
                 potentialToken = givePotentialToken (t1, t2, t3)
+                splittedByDiffs = splitToken potentialToken
+
+        hasMajor :: (TokenID, TokenID, TokenID) -> Bool
+        hasMajor (t1, t2, t3) = "M7" `isInfixOf` potentialToken
+            where
+                potentialToken = givePotentialToken (t1, t2, t3)
+
 
         hasBlockLenN :: (TokenID, TokenID, TokenID) -> Int -> Bool
         hasBlockLenN (t1, t2, t3) n = length potentialToken == n * 2 - 1

@@ -2,7 +2,7 @@ module TokenToBlock where
 
 import           Chords        (applyDiffToNote, readDiff)
 import           Data.List     (elemIndex)
-import           SplitByTokens (splitByDictionary)
+import           SplitByTokens (splitToken, splitByDictionary)
 
 
 tokenToBlock :: [String] -> String -> String
@@ -15,7 +15,7 @@ tokenToBlock tokensDictionary token = case mbRootNoteIndex of
                                             convertNextToBlock rootNote next
                         block
     where
-        splitToken = splitByDictionary token tokensDictionary
+        splitToken = splitByDictionary token tokensDictionary -- TODO switch to splitToken, why fails?
 
         majorIndex = elemIndex "M7" splitToken
         minorIndex = elemIndex "m7" splitToken
