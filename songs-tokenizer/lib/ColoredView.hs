@@ -30,7 +30,7 @@ printColoredSong song = do
 
     where
         uniqueTokens = sort $ nub $ fromJust $ tokenView song
-        tokenColors = zip uniqueTokens selectedColors
+        tokenColors = zip uniqueTokens (cycle selectedColors)
         tokenBlock = zip (fromJust $ tokenView song) (fromJust $ blockView song)
         blockColor = map (\(tok, blk) -> (blk, fromMaybe Black $ lookup tok tokenColors)) tokenBlock
 
