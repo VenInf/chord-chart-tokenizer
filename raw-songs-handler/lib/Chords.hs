@@ -23,11 +23,10 @@ septs :: [String]
 septs = ["mb7b5", "m7b5", "mM7", "M7", "m7", "7"]
 
 showDiff :: Int -> String
-showDiff n
-  | n < -5    = showDiff (n + 12)
-  | n > 6     = showDiff (n - 12)
-  | n > 0     = "(+" ++ show n ++ ")"
-  | otherwise = "(" ++ show n ++ ")"
+showDiff d
+  | nd > 0     = "(+" ++ show nd ++ ")"
+  | otherwise = "(" ++ show nd ++ ")"
+  where nd = normDiff d
 
 readDiff :: String -> Int
 readDiff diff = go diffNoParenthesis
@@ -64,7 +63,6 @@ removeBase rawChord = if '/' `elem` rawChord
                       then head $ splitOn "/" rawChord -- drop everyting after altered base
                       else rawChord
 
-
 rawToChord :: String -> Chord
 rawToChord chordRaw =
   case chordRaw of
@@ -75,6 +73,9 @@ rawToChord chordRaw =
     (note:'b':sept) -> Chord [note, 'b'] sept
     (note:'#':sept) -> Chord [note, '#'] sept
     (note:sept) -> Chord [note] sept
+
+isChord :: Chord -> Bool
+isChord (Chord note septima) = note `elem` notesOrder && septima `elem` septs
 
 normalizeChord :: Chord -> Chord
 normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial septima)
@@ -92,6 +93,32 @@ normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial septima)
               "B#" -> "C"
 
               n -> n
+
+chordDiff :: Chord -> Chord -> Int
+chordDiff ch1@(Chord {note=n1}) ch2@(Chord {note=n2}) = normDiff $ pitch2 - pitch1
+  where
+    pitch1 = case elemIndex n1 notesOrder of
+              Nothing -> error (show ch1 ++ " encountered, failed to parse")
+              Just p -> p
+    pitch2 = case elemIndex n2 notesOrder of
+              Nothing -> error (show ch2 ++ " encountered, failed to parse")
+              Just p -> p
+
+normDiff :: Int -> Int
+normDiff d
+  | d < -5    = normDiff (d + 12)
+  | d > 6     = normDiff (d - 12)
+  | otherwise = d
+
+
+chordDiffShow:: Chord -> Chord -> String
+chordDiffShow ch1 ch2 = showDiff $ chordDiff ch1 ch2
+
+similarity :: Chord -> Chord -> Float
+similarity ch1 ch2 = 1 - fromIntegral (septDiff + abs (chordDiff ch1 ch2)) / fromIntegral (length notesOrder + 1)
+  where
+    septDiff = if septima ch1 == septima ch2 then 0 else 1
+
 
 
 -- | Reads all possible septimas to

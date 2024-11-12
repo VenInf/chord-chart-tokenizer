@@ -22,9 +22,9 @@ library
         , boxes
         , colonnade
         , containers
-        , split
         , extra
         , hashable
+        , split
     hs-source-dirs:   lib
     default-language: Haskell2010
 

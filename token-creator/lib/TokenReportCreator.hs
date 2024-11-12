@@ -1,7 +1,8 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module TokenReportCreator where
 
 import           Colonnade
-import           Data.List              (sortBy, zipWith6)
+import           Data.List              (sortBy, zipWith6, maximumBy, zipWith7)
 import qualified Data.Maybe             as MB
 import           Data.Tuple
 import           Data.Tuple.Extra       (uncurry3)
@@ -10,6 +11,10 @@ import           SplitByTokens          (makeTokensDictionary)
 import           Text.PrettyPrint.Boxes
 import           TokenCreator
 import           TokenToBlock
+import Chords
+import           Data.List.Split
+import Data.Function (on)
+
 
 
 data Ranks = Ranks { place       :: Int
@@ -18,6 +23,7 @@ data Ranks = Ranks { place       :: Int
                    , token       :: String
                    , block       :: String
                    , knownName   :: String
+                   , howSimilar  :: Float
                    } deriving (Show)
 
 data LenStats = LenStats { lengthLen :: Int
@@ -25,9 +31,25 @@ data LenStats = LenStats { lengthLen :: Int
                          , blockLen  :: String
                          } deriving (Show)
 
+bestMatch :: String -> [String] -> (String, Float)
+bestMatch targetBlock knownBlocks = if all isChord blockChords
+                                    then (unwords $ map showChord foundMatch, match blockChords foundMatch)
+                                    else ("", 0)
+    where
+        toChords :: String -> [Chord]
+        toChords blk = map rawToChord $ splitOn " " $ unwords $ words blk
+
+        match :: [Chord] -> [Chord] -> Float
+        match chords1 chords2 = sum (zipWith similarity chords1 chords2)/ fromIntegral (max (length chords1) (length chords2))
+
+        blockChords = toChords targetBlock
+        knownBlocksChords = filter (all isChord) $ map toChords knownBlocks
+
+        foundMatch = maximumBy (compare `on` match blockChords) knownBlocksChords
+
 
 makeRanks :: TokenCreatorState -> [(String, String)] -> [Ranks]
-makeRanks state namedBlocks = zipWith6 Ranks [1..] amounts probabilities tokens blocks fromattedKnownNames
+makeRanks state namedBlocks = zipWith7 Ranks [1..] amounts probabilities tokens blocks formattedKnownNames formattedHowSimilar
     where
         normNamedBlocks = map (\(name, blk) -> (name,
                              tokenToBlock tokensDictionary $ unwords $ chordsToDiff $ contentToChords blk)) namedBlocks
@@ -40,8 +62,15 @@ makeRanks state namedBlocks = zipWith6 Ranks [1..] amounts probabilities tokens 
         probabilities = map ((/ totalAmount) . toEnum) amounts
         tokens = map fst tokenAmounts
         blocks = map (tokenToBlock tokensDictionary) tokens
-        knownNames = map (\blk -> lookup blk (map swap normNamedBlocks)) blocks
-        fromattedKnownNames = map (MB.fromMaybe "") knownNames
+
+        -- TODO:
+        -- Instead of perfect match normNamedBlocks to blocks
+        -- do a fuzzy match
+        bestMatches = map (\target -> bestMatch target $ map snd normNamedBlocks) blocks
+        knownNames = map ((\blk -> lookup blk (map swap normNamedBlocks)) . fst) bestMatches
+        formattedKnownNames = map (MB.fromMaybe "") knownNames
+        formattedHowSimilar = map snd bestMatches
+
 
 
 makeLenStats :: TokenCreatorState -> [LenStats]
@@ -63,7 +92,8 @@ colRanks = mconcat
         , headed "%" (show . (* 100) . probability)
         , headed "Token" token
         , headed "Block" block
-        , headed "Known name" knownName
+        , headed "Closest known" knownName
+        , headed "How similar" $ (\score -> if score == 0 then "" else show score) . howSimilar
         ]
 
 colLenStats :: Colonnade Headed LenStats String
@@ -81,11 +111,12 @@ makeStats state ranks knownBlocks = stats
 
         shannonInformation = (-1) * sum [p * logBase 2 p | p <- map probability ranks]
 
-        foundBlocks = filter (/= "") (map knownName ranks)
+        similarities = map howSimilar ranks
+        totalSimilarity = sum similarities / fromIntegral (length similarities)
 
         stats = vcat top [ hcat top $ map text ["% of covered by meaningful blocks ", show meaningfulPercent]
                          , hcat top $ map text ["information/entropy by Shannon ", show shannonInformation]
-                         , hcat top $ map text ["found ", show $ length foundBlocks, " out of ", show $ length knownBlocks, " known blocks"]
+                         , hcat top $ map text ["total similarity to known bloks is ", show totalSimilarity]
                          ]
 
 createReport :: TokenCreatorState -> [(String, String)] -> String
@@ -96,5 +127,5 @@ createReport state namedBlocks = report
         stats = render $ makeStats state (makeRanks state namedBlocks) namedBlocks
         report = unlines [ "Information about found tokens:"
                          , stats
-                         , lenStats
+                        --  , lenStats
                          , ranks ]

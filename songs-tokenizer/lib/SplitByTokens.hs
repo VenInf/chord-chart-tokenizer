@@ -3,9 +3,9 @@ module SplitByTokens where
 import           Chords
 import           Data.List       (intercalate, nub, sortOn)
 import           Data.List.Extra (splitOn)
+import           Data.List.Split (split, whenElt)
 import           Data.Maybe
 import           Safe            (headMay)
-import Data.List.Split ( whenElt, split )
 
 
 ignoreWords :: [String]
@@ -25,8 +25,8 @@ splitToken token = filter (/= "") $ go splitPars ""
         go :: [String] -> String -> [String]
         go ("(" : rest) accum = accum : go rest "("
         go (")" : rest) accum = (accum ++ ")") : go rest []
-        go (s : rest) accum = go rest (accum ++ s)
-        go [] accum = [accum]
+        go (s : rest) accum   = go rest (accum ++ s)
+        go [] accum           = [accum]
 
 fromRelativeGivenRoot :: String -> [String] -> [Chord]
 fromRelativeGivenRoot _ [] = []

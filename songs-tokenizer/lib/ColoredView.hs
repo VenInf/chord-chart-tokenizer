@@ -1,16 +1,12 @@
+{-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE DataKinds #-}
 module ColoredView where
 
+import           Data.List
+import           Data.List.Extra     (dropPrefix, unsnoc)
+import           Data.Maybe          (fromJust, fromMaybe)
 import           Songs
-import Data.List (nub)
-import Data.Maybe (fromJust, fromMaybe)
-import System.Console.ANSI
-import Data.List.Extra (sort, dropPrefix)
-import Data.List (inits)
-import Data.List.Extra (unsnoc)
-import Data.List (intersperse)
-import Data.List
+import           System.Console.ANSI
 
 selectedColors :: [Color]
 selectedColors = [Red, Green, Yellow, Blue, Magenta, Cyan]
@@ -36,15 +32,15 @@ printColoredSong song = do
 
 takeNBars :: Int -> [(String, Color)] -> [(String, Color)]
 takeNBars n blkClr = case unsnoc lessThanNBars of
-                        Just (_, []) -> fallbackCase
-                        Nothing -> fallbackCase
+                        Just (_, [])   -> fallbackCase
+                        Nothing        -> fallbackCase
                         Just (_, list) -> list
     where
         potentialLines = inits blkClr
         lessThanNBars = filter ((<= n) . length . concatMap (filter (== '|') . fst)) potentialLines
         fallbackCase = case blkClr of
                             (h:_) -> [h]
-                            [] -> []
+                            []    -> []
 
 splitByNBars :: Int -> [(String, Color)] -> [[(String, Color)]]
 splitByNBars _ [] = []

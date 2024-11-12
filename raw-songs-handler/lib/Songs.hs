@@ -44,18 +44,8 @@ contentToChords content = filterThreeRepeatingChords $ map (normalizeChord . raw
 chordsToDiff :: [Chord] -> [String]
 chordsToDiff chords = (concat . transpose) [gatheredSepts, relativeNoNotes]
   where
-    relativeNoNotes = map (uncurry chordDiff) (makePairs chords)
+    relativeNoNotes = map (uncurry chordDiffShow) (makePairs chords)
     gatheredSepts = map septima chords
-
-    chordDiff :: Chord -> Chord -> String
-    chordDiff ch1@(Chord {note=n1}) ch2@(Chord {note=n2}) = showDiff $ pitch2 - pitch1
-      where
-        pitch1 = case elemIndex n1 notesOrder of
-                 Nothing -> error (show ch1 ++ " encountered, failed to parse")
-                 Just p -> p
-        pitch2 = case elemIndex n2 notesOrder of
-                 Nothing -> error (show ch2 ++ " encountered, failed to parse")
-                 Just p -> p
 
     makePairs (a:b:t) = (a, b) : makePairs (b:t)
     makePairs _       = []
