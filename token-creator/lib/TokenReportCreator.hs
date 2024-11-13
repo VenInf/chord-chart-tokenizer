@@ -1,8 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module TokenReportCreator where
 
+import           Chords
 import           Colonnade
-import           Data.List              (sortBy, zipWith6, maximumBy, zipWith7)
+import           Data.Function          (on)
+import           Data.List              (maximumBy, sortBy, zipWith7)
+import           Data.List.Split
 import qualified Data.Maybe             as MB
 import           Data.Tuple
 import           Data.Tuple.Extra       (uncurry3)
@@ -11,9 +14,6 @@ import           SplitByTokens          (makeTokensDictionary)
 import           Text.PrettyPrint.Boxes
 import           TokenCreator
 import           TokenToBlock
-import Chords
-import           Data.List.Split
-import Data.Function (on)
 
 
 
