@@ -12,7 +12,7 @@ import           Data.List       (intercalate, isInfixOf, isPrefixOf,
 import           Data.List.Extra (splitOn)
 import qualified Data.Map.Strict as Map
 import           Data.Maybe      (fromJust)
-import SplitByTokens (splitToken)
+import           SplitByTokens   (splitToken)
 
 type TokenID = Int
 

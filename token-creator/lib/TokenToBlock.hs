@@ -2,7 +2,7 @@ module TokenToBlock where
 
 import           Chords        (applyDiffToNote, readDiff)
 import           Data.List     (elemIndex)
-import           SplitByTokens (splitToken, splitByDictionary)
+import           SplitByTokens (splitByDictionary)
 
 
 tokenToBlock :: [String] -> String -> String
@@ -41,7 +41,7 @@ tokenToBlock tokensDictionary token = case mbRootNoteIndex of
                                   Just index -> Just ("C", index)
                                   Nothing -> case minorMajorIndex of
                                     Just index -> Just ("C", index)
-                                    Nothing -> Nothing
+                                    Nothing    -> Nothing
 
 
 convertNextToBlock :: String -> [String] -> [String]

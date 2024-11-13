@@ -1,11 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-import Test.Tasty (defaultMain, testGroup, TestTree)
-import Test.Tasty.HUnit ((@?=), testCase)
-import Songs
-import System.Directory
-import System.FilePath
-import Chords
-import Data.List (nub, sort)
+import           Chords
+import           Data.List        (nub, sort)
+import           Songs
+import           System.Directory
+import           System.FilePath
+import           Test.Tasty       (TestTree, defaultMain, testGroup)
+import           Test.Tasty.HUnit (testCase, (@?=))
 
 rawSongsDir :: FilePath
 rawSongsDir = "./data/raw-songs/"

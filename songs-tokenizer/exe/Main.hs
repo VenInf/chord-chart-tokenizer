@@ -4,6 +4,7 @@
 
 module Main where
 
+import           ColoredView            (printColoredSongs)
 import           Data.Aeson
 import           Songs
 import           SongsReportCreator
@@ -11,7 +12,6 @@ import           SplitByTokens
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
-import ColoredView (printColoredSongs)
 
 songsJSONDir :: FilePath
 songsJSONDir = "./data/out-songs/"

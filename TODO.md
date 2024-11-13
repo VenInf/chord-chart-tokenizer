@@ -12,7 +12,7 @@
 - [x] Token to Blocks converter (assume that the first M7 is CM7)
 - [x] Priority for tokens that start and end with a sept accord
 - [x] Split song by tokens ???
-- [] Visualize song split (use default pagenizer)
+- [x] Visualize song split (use default pagenizer)
 
 - [x] Refactoring
 - [] Stats after creating tokens
@@ -32,8 +32,7 @@
 - [x] Get blocks from literature
 - [x] Get blocks with minor alterations
 - [x] Get blocks with stress alterations
-- [] Get blocks from websites
-- [] Rewrite readme
+- [x] Rewrite readme
 
 - [] Tests!
     - [x] Is chords reading is adequate
@@ -47,4 +46,3 @@
 - [x] Tokenizer State
 - [x] Save state to a file
 - [x] Retrive state from a file
-- [] State monad

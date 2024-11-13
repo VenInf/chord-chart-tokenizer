@@ -1,11 +1,11 @@
-{-# LANGUAGE DeriveAnyClass   #-}
+{-# LANGUAGE DeriveAnyClass  #-}
 {-# LANGUAGE DeriveGeneric   #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 
 module Songs where
 
-import Chords
+import           Chords
 import           Data.Aeson
 import           Data.List
 import           Data.List.Split

@@ -11,10 +11,9 @@ import           Data.List
 import           Data.List.Split
 import           GHC.Generics
 
-data Chord = Chord {
-      note :: String
-    , septima :: String
-} deriving (Generic, Show, Eq, ToJSON, FromJSON)
+data Chord = Chord { note    :: String
+                   , septima :: String
+                   } deriving (Generic, Show, Eq, ToJSON, FromJSON)
 
 notesOrder :: [String]
 notesOrder = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
@@ -33,7 +32,7 @@ readDiff diff = go diffNoParenthesis
     where
         diffNoParenthesis = init $ tail diff
         go ('+':numb) = read numb
-        go numb = read numb
+        go numb       = read numb
 
 showChord :: Chord -> String
 showChord (Chord {..}) = note <> septima
@@ -42,7 +41,7 @@ applyDiffToNote :: String -> Int -> String
 applyDiffToNote note diff = notesOrder !! newIndex
     where
         noteIndex = case elemIndex note notesOrder of
-                        Nothing -> error $ show note ++ " is not a valid note"
+                        Nothing   -> error $ show note ++ " is not a valid note"
                         Just indx -> indx
         newIndex = (noteIndex + diff) `mod` length notesOrder
 
@@ -55,7 +54,7 @@ alterThirdsInChord (Chord {..}) = case septima of
     "M7"    -> Chord note "mM7"
     "mM7"   -> Chord note "M7"
     "mb7b5" -> Chord note "mb7b5" -- unclear what the altered version should be
-    _ -> error $ "Unknown septima " ++ septima
+    _       -> error $ "Unknown septima " ++ septima
 
 
 removeBase :: String -> String
@@ -66,13 +65,13 @@ removeBase rawChord = if '/' `elem` rawChord
 rawToChord :: String -> Chord
 rawToChord chordRaw =
   case chordRaw of
-    [] -> Chord [] []
-    [note, 'b'] -> Chord [note, 'b'] "M" -- we will note major as M
-    [note, '#'] -> Chord [note, '#'] "M"
-    [note] -> Chord [note] "M"
+    []              -> Chord [] []
+    [note, 'b']     -> Chord [note, 'b'] "M" -- we will note major as M
+    [note, '#']     -> Chord [note, '#'] "M"
+    [note]          -> Chord [note] "M"
     (note:'b':sept) -> Chord [note, 'b'] sept
     (note:'#':sept) -> Chord [note, '#'] sept
-    (note:sept) -> Chord [note] sept
+    (note:sept)     -> Chord [note] sept
 
 isChord :: Chord -> Bool
 isChord (Chord note septima) = note `elem` notesOrder && septima `elem` septs
@@ -92,17 +91,17 @@ normalizeChord (Chord {..}) = Chord normNote (readSeptLessTrivial septima)
               "A#" -> "Bb"
               "B#" -> "C"
 
-              n -> n
+              n    -> n
 
 chordDiff :: Chord -> Chord -> Int
 chordDiff ch1@(Chord {note=n1}) ch2@(Chord {note=n2}) = normDiff $ pitch2 - pitch1
   where
     pitch1 = case elemIndex n1 notesOrder of
               Nothing -> error (show ch1 ++ " encountered, failed to parse")
-              Just p -> p
+              Just p  -> p
     pitch2 = case elemIndex n2 notesOrder of
               Nothing -> error (show ch2 ++ " encountered, failed to parse")
-              Just p -> p
+              Just p  -> p
 
 normDiff :: Int -> Int
 normDiff d
