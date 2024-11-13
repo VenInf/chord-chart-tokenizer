@@ -54,3 +54,8 @@ Make a tokenized JSON file with the report (this may take about 7 minutes, depen
 ```
 cabal run exe:songs-tokenizer -- -i parsed-songs.json -t tokens-500.txt -o tokenized-songs-500.json -r songs-report.txt
 ```
+
+View the resulting tokenization in the terminal (you may use any other file pager of your liking instead of `less`):
+```
+cabal run exe:songs-tokenizer -- -i tokenized-songs-500.json --colored-view | less 
+```
