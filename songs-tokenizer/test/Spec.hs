@@ -17,7 +17,7 @@ addTokenView :: Song -> [String] -> [String] -> Song
 addTokenView song@(Song{content=cnt}) tokensDictionary tokens = song{tokenView = Just tknView, blockView = Just blkView}
     where
         wordedSong = words cnt
-        blkView = chordsByTokens wordedSong tokensDictionary tokens
+        blkView = chordsByTokens wordedSong tokens
         tknView = map (unwords . chordsToDiff . contentToChords) blkView
 
 
