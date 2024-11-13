@@ -5,15 +5,15 @@
 module Main (main) where
 
 import           Chords
-import           Data.List              (intercalate, sortBy, nubBy)
+import           Data.List              (intercalate, nubBy, sortBy)
 import           Data.List.Split
+import           Data.Ord
 import           Songs                  (contentToChords)
 import           System.Console.CmdArgs (Data, Default (def), Typeable, cmdArgs,
                                          help, typFile, (&=))
 import           System.Exit
 import           TokenCreator
 import           TokenReportCreator
-import Data.Ord
 
 
 songsInRelativeDir :: FilePath
@@ -29,16 +29,16 @@ knownBlocksDir :: FilePath
 knownBlocksDir = "./data/known-blocks/"
 
 
-data CreatorArgs = CreatorArgs
-                   { notation_file :: FilePath
-                   , make_n_tokens :: Int
-                   , report_file   :: FilePath
-                   , tokens_file   :: FilePath
-            }
-            deriving (Show, Read, Data, Typeable)
+data TokenCreator = TokenCreator
+                    { notation_file :: FilePath
+                    , make_n_tokens :: Int
+                    , report_file   :: FilePath
+                    , tokens_file   :: FilePath
+                    }
+                    deriving (Show, Read, Data, Typeable)
 
-defaultArgs :: CreatorArgs
-defaultArgs = CreatorArgs
+defaultArgs :: TokenCreator
+defaultArgs = TokenCreator
               { notation_file = def &= typFile &= help "A name for the input file with songs in relative notation"
               , make_n_tokens = 0 &= help "How many tokens should it create"
 

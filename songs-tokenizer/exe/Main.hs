@@ -22,24 +22,23 @@ tokensDir = "./data/tokens/"
 reportsDir :: FilePath
 reportsDir = "./data/reports/"
 
-data TokenizerArgs = TokenizerArgs
-                   { in_json_file  :: FilePath
-                   , tokens_file   :: FilePath
-                   , report_file   :: FilePath
-                   , out_json_file :: FilePath
-                   , colored_view  :: Bool
-                   }
-                     deriving (Show, Read, Data, Typeable)
+data SongsTokenizer = SongsTokenizer
+                      { in_json_file  :: FilePath
+                      , tokens_file   :: FilePath
+                      , report_file   :: FilePath
+                      , out_json_file :: FilePath
+                      , colored_view  :: Bool
+                      }
+                      deriving (Show, Read, Data, Typeable)
 
-defaultArgs :: TokenizerArgs
-defaultArgs = TokenizerArgs
+defaultArgs :: SongsTokenizer
+defaultArgs = SongsTokenizer
               { in_json_file = def &= typFile &= help "A name for the input json file with songs"
               , colored_view = def &= help "Output colored view of inputed songs, colors representing the tokens"
 
               , tokens_file = def &= help "A name for the input file with tokens"
               , report_file = def &= help "Make a report with given name"
               , out_json_file = def &= typFile &= help "Give songs tokenized view"
-
               }
 
 addTokenView :: Song -> [String] -> [String] -> Song
