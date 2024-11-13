@@ -50,7 +50,7 @@ Make tokens and report files (this may take about 2 minutes, depending on amount
 cabal run exe:token-creator -- -n rel-notation.txt -m 500 -r tokens-report-500.txt -t tokens-500.txt
 ```
 
-Make a tokenized JSON file with the report (this may take about 7 minutes, depending on amount of tokens):
+Make a tokenized JSON file with the report (this may take about 5 minutes, depending on amount of tokens):
 ```
 cabal run exe:songs-tokenizer -- -i parsed-songs.json -t tokens-500.txt -o tokenized-songs-500.json -r songs-report.txt
 ```
