@@ -1,49 +1,56 @@
-## The readme is outdated
-
 ### What is this?
 
-This is a CLI tool, that helps create text tokens using a given text file.
-It uses the Byte Pair Encoder algorithm, and can make a specified amount of extra tokens
-(to the addition of the letters used in the text)
+These are CLI tools, to find patterns (tokens) in lead sheets in Jazz music.
+This is an attempt at finding underlying structure of Jazz music and using it for
+mapping other Jazz songs.
 
-### Building
+### CLI tools?
 
-To build run `stack build` in the `/byte-pair-encoder` directory.
-If you want to copy the exec file to local bin,
-run `stack build --copy-bin`
+The first one named `raw-songs-handler` reads provided Jazz sheets and outputs
+JSON with parsed, annotated songs and a txt file with songs in "relative notation".
+Instead of looking at song as a series of chords, we convert them in chords separated by their
+half-tone differences.
 
-### Running
+For example : `Dm7 G7 CM7 CM7` -> `m7 (+5) 7 (+5) M7 (0) M7`
 
-The help message:
+The second is `token-creator` takes the relative notation as input and
+constructs and outputs a given number of tokens. Additionally you can request
+a report with more information about the tokens for further analysis.
 
-`byte-pair-encoder-exe --help`
+The third is `songs-tokenizer` takes the JSON file with songs and tokens,
+and outputs a JSON with tokenized songs. The report can be also requested.
+Also, the same tool can be used for visualization of tokenized JSON.
 
+More on running and usage below.
+
+### Prerequisites
+
+The project is written in Haskell, using cabal.
+I recommend installing [GHCup](https://www.haskell.org/ghcup/install/)
+to handle these dependencies.
+
+### How to build and run the tools?
+
+For building and running, we will use `cabal run exe:<my-target> -- <arguments>` command.
+For help message run the following:
 ```
-The bpe program
-
-bpe [OPTIONS]
-
-Common flags:
-  -t --text-path=FILE         Get data for tokenization from file as a text
-  -c --config-path=FILE       Specify non-default config file (ignore other
-                              flags if using this one)
-  -l --load-state-path=FILE   Specify a tokenizer save file to continue work
-                              (loads it if specified)
-  -m --make-tokens=INT        How many tokens should it create
-  -s --save-state-path=FILE   If specified, saves the internal state in the
-                              path
-  -g --give-top-n-tokens=INT  Gives top n tokens as an output
-  -? --help                   Display help message
-  -V --version                Print version information
+cabal run exe:raw-songs-handler -- --help
+cabal run exe:token-creator -- --help
+cabal run exe:songs-tokenizer -- --help
 ```
 
-Some examples of usage:
 
-Make 256 extra tokens and give top 10 by popularity.
-`byte-pair-encoder-exe --text-path ./mine/text_example.txt --make-tokens 256 --give-top-n-tokens 10`
+Make JSON and relative notation files:
+```
+cabal run exe:raw-songs-handler -- -r rel-notation.txt -o parsed-songs.json
+```
 
-Make 256 extra tokens and save the tokenizator state.
-`byte-pair-encoder-exe --text-path ./mine/text_example.txt --make-tokens 256 --save-state-path ./save_file.txt`
+Make tokens and report files (this may take about 2 minutes, depending on amount of tokens):
+```
+cabal run exe:token-creator -- -n rel-notation.txt -m 500 -r tokens-report-500.txt -t tokens-500.txt
+```
 
-Load state, make 1024 tokens and give top 50 of the tokens
-`byte-pair-encoder-exe --load-state-path ./save_file.txt --make-tokens 1024 --give-top-n-tokens 50`
+Make a tokenized JSON file with the report (this may take about 7 minutes, depending on amount of tokens):
+```
+cabal run exe:songs-tokenizer -- -i parsed-songs.json -t tokens-500.txt -o tokenized-songs-500.json -r songs-report.txt
+```
