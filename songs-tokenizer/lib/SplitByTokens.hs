@@ -36,9 +36,9 @@ fromRelativeGivenRoot rootNote (r:rest)
     where
         startingWithDiff :: String -> [String] -> [Chord]
         startingWithDiff rNote (noteDiff:sept:relNotation) = Chord nextNote sept : startingWithDiff nextNote relNotation
-            where nextNote = applyDiffToNote rNote (readDiff noteDiff)
+            where nextNote = applyDiffToNote rNote (readDiffHardcoded noteDiff)
         startingWithDiff rNote [noteDiff] = [Chord nextNote ""]
-            where nextNote = applyDiffToNote rNote (readDiff noteDiff)
+            where nextNote = applyDiffToNote rNote (readDiffHardcoded noteDiff)
         startingWithDiff _ _ = []
 
 splitByChords :: [String] -> [Chord] -> ([String], [String])
@@ -63,11 +63,11 @@ splitByToken wordedSong splitedToken = Data.Maybe.fromMaybe ([], wordedSong) mbS
 makeTokensDictionary :: [String] -> [String]
 makeTokensDictionary diffs = sortOn ((* (-1)) . length) $ nub $ concatMap words diffs
 
-chordsByTokens :: [String] -> [String] -> [String] -> [String]
-chordsByTokens wordedSong tokensDictionary tokens = case mbGreedySplit of
+chordsByTokens :: [String] -> [String] -> [String]
+chordsByTokens wordedSong tokens = case mbGreedySplit of
                                    Nothing -> []
-                                   Just (tokenized, rest) -> unwords tokenized : chordsByTokens rest tokensDictionary tokens
+                                   Just (tokenized, rest) -> unwords tokenized : chordsByTokens rest tokens
     where
-        splitedTokens = map (`splitByDictionary` tokensDictionary) tokens
+        splitedTokens = map splitToken tokens
         splits = map (splitByToken wordedSong) splitedTokens
         mbGreedySplit = headMay $ filter (not . null . fst) splits

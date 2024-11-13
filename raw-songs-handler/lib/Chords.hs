@@ -21,6 +21,9 @@ notesOrder = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
 septs :: [String]
 septs = ["mb7b5", "m7b5", "mM7", "M7", "m7", "7"]
 
+diffs :: [String]
+diffs = ["(+6)", "(+5)", "(+4)", "(+3)", "(+2)", "(+1)", "(0)", "(-1)", "(-2)", "(-3)", "(-4)", "(-5)"]
+
 showDiff :: Int -> String
 showDiff d
   | nd > 0     = "(+" ++ show nd ++ ")"
@@ -33,6 +36,22 @@ readDiff diff = go diffNoParenthesis
         diffNoParenthesis = init $ tail diff
         go ('+':numb) = read numb
         go numb       = read numb
+
+readDiffHardcoded :: String -> Int
+readDiffHardcoded "(+6)" = 6
+readDiffHardcoded "(+5)" = 5
+readDiffHardcoded "(+4)" = 4
+readDiffHardcoded "(+3)" = 3
+readDiffHardcoded "(+2)" = 2
+readDiffHardcoded "(+1)" = 1
+readDiffHardcoded "(0)"  = 0
+readDiffHardcoded "(-1)" = -1
+readDiffHardcoded "(-2)" = -2
+readDiffHardcoded "(-3)" = -3
+readDiffHardcoded "(-4)" = -4
+readDiffHardcoded "(-5)" = -5
+readDiffHardcoded d = error $ "Unable to parse diff " ++ d
+
 
 showChord :: Chord -> String
 showChord (Chord {..}) = note <> septima

@@ -1,6 +1,6 @@
 module TokenToBlock where
 
-import           Chords        (applyDiffToNote, readDiff)
+import           Chords        (applyDiffToNote, readDiff, readDiffHardcoded)
 import           Data.List     (elemIndex)
 import           SplitByTokens (splitByDictionary)
 
@@ -46,9 +46,9 @@ tokenToBlock tokensDictionary token = case mbRootNoteIndex of
 
 convertNextToBlock :: String -> [String] -> [String]
 convertNextToBlock rootNote (noteDiff:sept:relNotation) = (nextNote <> sept) : convertNextToBlock nextNote relNotation
-    where nextNote = applyDiffToNote rootNote (readDiff noteDiff)
+    where nextNote = applyDiffToNote rootNote (readDiffHardcoded noteDiff)
 convertNextToBlock rootNote [noteDiff] = [nextNote <> "?"]
-    where nextNote = applyDiffToNote rootNote (readDiff noteDiff)
+    where nextNote = applyDiffToNote rootNote (readDiffHardcoded noteDiff)
 convertNextToBlock _ _ = []
 
 
@@ -56,7 +56,7 @@ convertPrevToBlock :: String -> [String] -> [String]
 convertPrevToBlock rootNote relNotation = reverse $ go rootNote (reverse relNotation)
     where
         go rNote (noteDiff:sept:rest) = (prevNote <> sept) : go prevNote rest
-            where prevNote = applyDiffToNote rNote (negate $ readDiff noteDiff)
+            where prevNote = applyDiffToNote rNote (negate $ readDiffHardcoded noteDiff)
         go rNote [noteDiff] = [prevNote <> "?"]
-            where prevNote = applyDiffToNote rNote (negate $ readDiff noteDiff)
+            where prevNote = applyDiffToNote rNote (negate $ readDiffHardcoded noteDiff)
         go _ _ = []
